@@ -1,0 +1,252 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Floor Guardians</title>
+  <style>
+    html, body { margin: 0; background: #fff; color: #111; }
+    header img { display: block; width: 100%; height: auto; }
+    pre {
+      margin: 0 auto;
+      max-width: 78ch;
+      padding: 2.5rem 1.25rem 5rem;
+      background: #fff;
+      color: #111;
+      font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+      font-size: 14px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="header.jpg" alt="Floor Guardians">
+  </header>
+  <pre>FLOORGUARD PROTOCOL
+A plain-language explanation and a guide for use
+This repository is an implementation and a test suite. It is not an audit,
+not a mainnet release, and not a promise that every marketplace honors the floor.
+
+
+WHAT IT IS
+
+FloorGuard is an Ethereum protocol that refuses an NFT sale when the price
+is below a recorded floor. The floor is denominated in one pinned USDC
+contract. The founding collection is 69 ERC-721 tokens. Each of those tokens
+has a floor of 100,000 USDC, which is 100000000000 base units because USDC
+uses 6 decimals.
+
+A sale is checked only on a path this protocol controls:
+
+  - FloorGuardDirectMarket, the protocol's own listing contract
+  - a Seaport 1.6 restricted order whose zone is FloorGuardSeaportZone
+
+The contracts are not upgradeable. Nobody, including the administrator and
+the timelock, can lower the founding floor. The direct market never holds
+the buyer's USDC, and it has no withdraw function.
+
+
+WHAT IT DOES NOT DO
+
+These paths are not protected:
+
+  - an OpenSea or other listing that does not use this Seaport zone
+  - an unrestricted Seaport order, because Seaport does not call the zone
+  - Magic Eden, because there is no adapter for it
+  - a private wallet transfer that is an owner-initiated gift
+  - an off-chain payment paired with an on-chain gift
+  - a registered collection whose own NFT contract does not call
+    FloorGuardTransferValidator, except when the sale itself goes through
+    an authorized adapter
+
+A gift is allowed. A sale below the floor, on a protected path, is not.
+
+
+WHO CAN DO WHAT
+
+Governance owner
+  One address. Can schedule, cancel, and execute changes after a 48-hour
+  timelock. Can later hand this role to a Safe. Cannot skip the delay,
+  lower the founding floor, move someone else's NFT, or take sale proceeds.
+
+Guardian
+  Can pause the direct market, the Seaport zone, or both. Cannot unpause,
+  change a floor, transfer an NFT, or approve an adapter. Unpausing waits
+  for the timelock.
+
+Collection administrator
+  For a collection that is not the founding collection, can raise that
+  collection's floor immediately when the policy allows it, set a higher
+  per-token floor, and opt into adapters the timelock has already approved.
+  Cannot change another collection, and cannot lower the founding floor.
+
+NFT owner of the founding collection
+  Can mint until 69 tokens exist, set metadata, and set a royalty of at
+  most 10 percent. Cannot raise the supply, burn a token, or take a token
+  back after it has been transferred.
+
+Sensitive changes wait 48 hours. Those include raising the founding floor,
+lowering a GovernanceAdjustable floor, changing the market fee, approving
+or removing an adapter, replacing the guardian, and unpausing sales.
+A guardian pause is immediate. Cancelling your own listing is immediate,
+including while sales are paused.
+
+
+PRICE POLICIES
+
+NonDecreasing
+  The floor can go up. It cannot go down. The founding collection uses
+  this policy and starts at 100,000 USDC.
+
+Fixed
+  The floor is the value recorded at registration. It does not move.
+
+GovernanceAdjustable
+  The timelock can raise or lower the floor after 48 hours. A collection
+  administrator can still raise it immediately, but cannot lower it.
+
+A per-token floor, when one is set, is the price that must be met if it
+is above the collection floor. For the founding collection, a token floor
+cannot be decreased either.
+
+Read the price that a sale must meet:
+
+  effectiveFloor(collection, tokenId)
+
+That value is in USDC base units. Divide by 1,000,000 to read it in USDC.
+100,000 USDC is 100000000000.
+
+
+HOW A SELLER USES THE DIRECT MARKET
+
+1. Confirm the collection is registered and that FloorGuardDirectMarket
+   is an authorized sale path for it. isSalePathAuthorized(collection,
+   market) must be true.
+
+2. Read the floor:
+
+     effectiveFloor(collection, tokenId)
+
+   The listing price must be greater than or equal to that number.
+
+3. Approve the market contract to transfer that NFT. list() does not pull
+   the token. buy() transfers it from you, so the approval has to be in
+   place before a buyer can complete the sale.
+
+4. Call:
+
+     list(collection, tokenId, price, expiry)
+
+   You must own the token. expiry is a unix timestamp in the future.
+   price is USDC base units. One token per listing. There are no bundles
+   and no partial fills.
+
+5. To take it down, call cancel(listingId). You can cancel while the
+   market is paused.
+
+
+HOW A BUYER USES THE DIRECT MARKET
+
+1. Read the listing. It must still be active, unexpired, and priced at
+   or above the current effective floor. If the floor was raised after
+   the listing was created, a stale underpriced listing cannot be bought.
+
+2. Approve the pinned USDC contract so the market can pull the full price
+   from your wallet. The market pays the seller, the royalty receiver, and
+   any protocol fee directly. It does not custody the payment.
+
+3. Call buy(listingId) from a wallet that is not the seller.
+
+   The market transfers the NFT to you and pulls USDC in the same
+   transaction. If the NFT does not arrive, or the USDC received is short,
+   the purchase reverts.
+
+A royalty comes from ERC-2981 on the collection. The protocol fee, if one
+has been set, is at most the cap enforced by the market. Royalty plus fee
+cannot exceed the price.
+
+
+HOW A SEAPORT ORDER USES THE FLOOR
+
+This is a separate path from the direct market. It applies only when all
+of the following are true:
+
+  - the order is a Seaport 1.6 restricted order
+  - the zone is FloorGuardSeaportZone
+  - Seaport is the pinned deployment
+    0x0000000000000068F116a894984e2DB1123eB395
+  - the offer is one ERC-721, amount 1
+  - every consideration item is the pinned USDC
+  - the USDC amounts add up to at least the effective floor
+  - the order's start and end times include the current block
+  - the collection has opted into this zone
+
+For the founding collection, the transfer operator must be that Seaport
+contract or the OpenSea conduit
+0x1E0049783F008A0085193E00003D00cd54003c71.
+
+An ordinary OpenSea listing does not do this by itself. Current OpenSea
+product behavior has to be checked against OpenSea's own documentation
+before anyone treats a public listing as floor-protected.
+
+
+HOW ANOTHER COLLECTION JOINS
+
+A collection with an owner() can register itself through the registry,
+choosing a policy and a starting floor above zero. The registrant becomes
+that collection's administrator.
+
+Registration records a floor. It does not, by itself, make the collection's
+own transfer function refuse a cheap sale. Full transfer protection exists
+for the founding NFT because that contract calls the transfer validator.
+Another collection is protected when the sale goes through an authorized
+adapter. Its own contract protects transfers only if it calls
+FloorGuardTransferValidator.
+
+The collection administrator can hand the role to a new address in two
+steps: proposeAdmin, then acceptAdmin from the new address.
+
+New marketplace adapters are separate contracts. The timelock must approve
+one before a collection can opt into it. There is no Magic Eden adapter
+in this repository.
+
+
+PAUSING
+
+The guardian can pause the direct market, the Seaport zone, or both.
+Paused sales cannot be opened or completed. Sellers can still cancel a
+direct-market listing. Unpausing is a timelock action and waits 48 hours.
+
+If the administrator key is lost, pause, gifts, and sales that are already
+authorized keep their existing rules. Sensitive changes stop, because there
+is no backup signer until ownership of FloorGuardGovernance is accepted
+by a Safe.
+
+
+WHERE THIS RUNS
+
+Sepolia first. Mainnet only after the gates in DEPLOYMENT.md.
+
+  Ethereum mainnet USDC   0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
+  Sepolia USDC            0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238
+  Seaport 1.6             0x0000000000000068F116a894984e2DB1123eB395
+
+This repository does not publish a FloorGuard deployment address. Deploy
+with script/Deploy.s.sol from a keystore or a hardware wallet. The script
+reads the administrator and guardian addresses from the environment. It
+does not read a private key.
+
+Build and test:
+
+  forge install
+  forge test
+
+Further detail lives in ARCHITECTURE.md, GOVERNANCE.md,
+MARKETPLACE_INTEGRATION.md, PRICE_ACCOUNTING.md, DEPLOYMENT.md, and
+KNOWN_LIMITATIONS.md.
+</pre>
+</body>
+</html>
