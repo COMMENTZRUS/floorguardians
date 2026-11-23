@@ -3,20 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FloorGuard Protocol | Immutable Minimum Price Protection for NFTs</title>
-  <meta name="description" content="FloorGuard is an Ethereum protocol that enforces an immutable, non-decreasing price floor on NFT sales denominated in USDC via Direct Market and Seaport 1.6 restricted zones.">
+  <title>FloorGuard Protocol | Immutable Floor Protection for Ethereum NFTs</title>
+  <meta name="description" content="FloorGuard enforces a permanent, non-decreasing price floor on Ethereum NFTs denominated in USDC through atomic native listings and Seaport 1.6 restricted zones.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0b0f19;
-      --bg-surface: #111827;
-      --bg-card: #162032;
-      --bg-card-hover: #1c2a42;
-      --border: #243248;
-      --border-focus: #3b82f6;
-      --text: #f1f5f9;
+      --bg: #090d16;
+      --bg-surface: #0f172a;
+      --bg-card: #131e33;
+      --bg-card-hover: #192742;
+      --border: #1e293b;
+      --border-focus: #38bdf8;
+      --text: #f8fafc;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
       --primary: #38bdf8;
@@ -54,7 +54,7 @@
       z-index: 50;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      background: rgba(11, 15, 25, 0.85);
+      background: rgba(9, 13, 22, 0.9);
       border-bottom: 1px solid var(--border);
     }
     .nav-inner {
@@ -85,11 +85,11 @@
       align-items: center;
       justify-content: center;
       font-size: 1rem;
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
     }
     .nav-links {
       display: flex;
-      gap: 1.25rem;
+      gap: 1.5rem;
       list-style: none;
     }
     .nav-links a {
@@ -141,7 +141,7 @@
       border-color: var(--primary);
     }
 
-    /* Hero Banner */
+    /* Full Bleed Edge-to-Edge Hero Banner */
     .hero-container {
       width: 100%;
       max-width: 100%;
@@ -166,29 +166,28 @@
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 3rem 1.5rem 6rem;
+      padding: 3.5rem 1.5rem 6rem;
     }
 
-    /* Hero Headline */
+    /* Hero Text */
     .hero-text {
       text-align: center;
-      max-width: 840px;
-      margin: 2.5rem auto 3.5rem;
+      max-width: 860px;
+      margin: 1.5rem auto 3.5rem;
     }
     .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: rgba(56, 189, 248, 0.1);
-      border: 1px solid rgba(56, 189, 248, 0.3);
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.25);
       color: var(--primary);
-      padding: 0.35rem 0.85rem;
+      padding: 0.4rem 0.95rem;
       border-radius: 9999px;
       font-size: 0.8rem;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 1.25rem;
+      letter-spacing: 0.03em;
+      margin-bottom: 1.5rem;
     }
     .hero-badge .pulse-dot {
       width: 8px;
@@ -198,19 +197,19 @@
       box-shadow: 0 0 8px var(--primary);
     }
     .hero-title {
-      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
       font-weight: 800;
       line-height: 1.15;
       letter-spacing: -0.03em;
       margin-bottom: 1.25rem;
-      background: linear-gradient(180deg, #ffffff 40%, #94a3b8 100%);
+      background: linear-gradient(180deg, #ffffff 40%, #cbd5e1 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
     .hero-subtitle {
       font-size: 1.15rem;
       color: var(--text-muted);
-      line-height: 1.6;
+      line-height: 1.65;
       margin-bottom: 2rem;
     }
 
@@ -291,24 +290,25 @@
     }
     .section-desc {
       color: var(--text-muted);
-      font-size: 1rem;
-      max-width: 760px;
+      font-size: 1.05rem;
+      max-width: 780px;
       margin-top: 0.5rem;
+      line-height: 1.6;
     }
 
     /* Interactive Calculator Card */
     .interactive-card {
-      background: linear-gradient(135deg, rgba(22, 32, 50, 0.9), rgba(17, 24, 39, 0.95));
+      background: linear-gradient(135deg, rgba(19, 30, 51, 0.95), rgba(15, 23, 42, 0.98));
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 2rem;
+      padding: 2.25rem;
       margin-bottom: 3.5rem;
       box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
     }
     .calc-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 2rem;
+      gap: 2.25rem;
       align-items: start;
     }
     @media (max-width: 768px) {
@@ -360,7 +360,7 @@
     }
     .result-label { color: var(--text-muted); }
     .result-value { font-family: var(--font-mono); font-weight: 700; color: #fff; }
-    .result-value.highlight { color: var(--success); font-size: 1.2rem; }
+    .result-value.highlight { color: var(--success); font-size: 1.25rem; }
     .status-pill {
       display: inline-flex;
       align-items: center;
@@ -448,7 +448,7 @@
 
     /* Code Blocks and Tabs */
     .code-container {
-      background: #090d16;
+      background: #060911;
       border: 1px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
@@ -625,8 +625,8 @@
       display: none;
       padding: 0 1.5rem 1.25rem;
       color: var(--text-muted);
-      font-size: 0.925rem;
-      line-height: 1.6;
+      font-size: 0.95rem;
+      line-height: 1.65;
     }
     .faq-item.open .faq-answer {
       display: block;
@@ -684,10 +684,10 @@
         <span>FloorGuard</span>
       </a>
       <ul class="nav-links">
-        <li><a href="#overview">Overview</a></li>
-        <li><a href="#architecture">Architecture</a></li>
-        <li><a href="#api-reference">API & Calls</a></li>
-        <li><a href="#seaport">Seaport 1.6</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#contracts">Contracts</a></li>
+        <li><a href="#integration">API & SDK</a></li>
+        <li><a href="#opensea">OpenSea & Seaport</a></li>
         <li><a href="#governance">Governance</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
@@ -696,12 +696,12 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
           GitHub
         </a>
-        <a href="#calculator" class="btn btn-primary">Check Floor</a>
+        <a href="#simulator" class="btn btn-primary">Try Simulator</a>
       </div>
     </div>
   </header>
 
-  <!-- Hero Header Image -->
+  <!-- Full Bleed Header Image -->
   <div class="hero-container">
     <div class="header-banner">
       <img src="header.jpg" alt="Floor Guardians Banner">
@@ -710,15 +710,15 @@
 
   <main class="container">
 
-    <!-- Hero Title & Intro -->
+    <!-- Hero Title & Pitch -->
     <div class="hero-text">
       <div class="hero-badge">
         <span class="pulse-dot"></span>
-        Ethereum Cancun EVM • Transient Storage (EIP-1153)
+        Built for Ethereum Cancun EVM • EIP-1153 Transient Storage
       </div>
-      <h1 class="hero-title">Enforcing Immutable NFT Floors in Pinned USDC</h1>
+      <h1 class="hero-title">A Hard Floor for Ethereum NFTs, Settled in USDC</h1>
       <p class="hero-subtitle">
-        FloorGuard guarantees an on-chain price floor that refuses below-floor sales across protected execution paths. Non-upgradeable contracts, 48-hour timelocked administration, and zero market token custody.
+        FloorGuard is an Ethereum protocol that enforces guaranteed minimum pricing right in the smart contract. If a sale doesn't meet the floor in pinned Circle USDC, the transaction simply reverts. Non-upgradeable contracts, zero marketplace custody, and 48-hour timelocks ensure that neither market panics nor rogue admins can drop the floor.
       </p>
     </div>
 
@@ -732,28 +732,28 @@
       <div class="metric-card">
         <div class="metric-label">Founding Supply</div>
         <div class="metric-value">69 Tokens</div>
-        <div class="metric-sub">Hard-capped ERC-721 mint limit</div>
+        <div class="metric-sub">Permanent, hard-capped mint limit</div>
       </div>
       <div class="metric-card">
-        <div class="metric-label">Price Policy</div>
-        <div class="metric-value">NonDecreasing</div>
-        <div class="metric-sub">Floor can only be raised, never lowered</div>
+        <div class="metric-label">Floor Policy</div>
+        <div class="metric-value">Upward Only</div>
+        <div class="metric-sub">The floor can rise; it can never be lowered</div>
       </div>
       <div class="metric-card">
-        <div class="metric-label">Timelock Window</div>
+        <div class="metric-label">Governance Delay</div>
         <div class="metric-value">48 Hours</div>
-        <div class="metric-sub">Minimum delay on any sensitive update</div>
+        <div class="metric-sub">Mandatory queue on every sensitive action</div>
       </div>
     </div>
 
-    <!-- Interactive Price & Floor Calculator -->
-    <section id="calculator">
+    <!-- Interactive Price & Fee Simulator -->
+    <section id="simulator">
       <div class="interactive-card">
         <div class="section-header" style="margin-bottom: 1.5rem;">
-          <div class="section-tag">Interactive Simulator</div>
-          <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff;">Direct Market Sale & Fee Calculator</h2>
-          <p style="color: var(--text-muted); font-size: 0.9rem;">
-            Test listing prices against the effective floor to simulate seller proceeds, royalties, and protocol fee accounting.
+          <div class="section-tag">Interactive Calculator</div>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff;">Direct Market Sale & Fee Breakdown</h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Test listing prices against the 100,000 USDC floor. See exactly how gross buyer payments, creator royalties, and net seller proceeds are calculated on-chain.
           </p>
         </div>
 
@@ -764,22 +764,22 @@
               <input type="number" id="calcPrice" class="input-field" value="100000" min="0" step="1000">
             </div>
             <div class="input-group">
-              <label class="input-label" for="calcRoyalty">Creator Royalty (%) - Max 10%</label>
+              <label class="input-label" for="calcRoyalty">Creator Royalty (%) — Capped at 10%</label>
               <input type="number" id="calcRoyalty" class="input-field" value="5.0" min="0" max="10" step="0.5">
             </div>
             <div class="input-group">
-              <label class="input-label" for="calcFee">Protocol Fee (bps) - Max 1000 (10%)</label>
+              <label class="input-label" for="calcFee">Protocol Fee (bps) — Capped at 1,000 (10%)</label>
               <input type="number" id="calcFee" class="input-field" value="0" min="0" max="1000" step="25">
             </div>
           </div>
 
           <div class="calc-result-box">
             <div class="result-row">
-              <span class="result-label">Minimum Effective Floor:</span>
+              <span class="result-label">Minimum Required Floor:</span>
               <span class="result-value">100,000.00 USDC</span>
             </div>
             <div class="result-row">
-              <span class="result-label">Floor Validation:</span>
+              <span class="result-label">Validation Result:</span>
               <span id="calcStatusPill" class="status-pill valid">✓ Passes Floor Check</span>
             </div>
             <div class="result-row">
@@ -787,11 +787,11 @@
               <span id="calcGross" class="result-value">100,000.00 USDC</span>
             </div>
             <div class="result-row">
-              <span class="result-label">Creator Royalty:</span>
+              <span class="result-label">Creator Royalty (ERC-2981):</span>
               <span id="calcRoyaltyAmt" class="result-value">5,000.00 USDC</span>
             </div>
             <div class="result-row">
-              <span class="result-label">Protocol Fee:</span>
+              <span class="result-label">Protocol Fee (Default 0%):</span>
               <span id="calcFeeAmt" class="result-value">0.00 USDC</span>
             </div>
             <div class="result-row">
@@ -803,13 +803,13 @@
       </div>
     </section>
 
-    <!-- Overview & Principles -->
-    <section id="overview">
+    <!-- How It Works -->
+    <section id="how-it-works">
       <div class="section-header">
-        <div class="section-tag">Core Fundamentals</div>
-        <h2 class="section-title">What FloorGuard Is & How It Works</h2>
+        <div class="section-tag">Design Principles</div>
+        <h2 class="section-title">How FloorGuard Actually Works</h2>
         <p class="section-desc">
-          FloorGuard removes discretionary price concessions by baking enforceable economic minimums into smart contracts on Ethereum.
+          Most NFT floors are just gentleman's agreements subject to market panic and undercutting. FloorGuard makes the floor an on-chain enforcement rule.
         </p>
       </div>
 
@@ -817,56 +817,56 @@
         <table class="data-table">
           <thead>
             <tr>
-              <th>Feature</th>
-              <th>Enforced by Protocol</th>
-              <th>Behavior & Boundaries</th>
+              <th>Sale Path</th>
+              <th>How It Behaves</th>
+              <th>Enforcement Mechanism</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Direct Market Listing</strong></td>
+              <td><strong>Direct Market Sale</strong></td>
               <td><span class="status-pill valid">Enforced</span></td>
-              <td>Atomic execution on <code>FloorGuardDirectMarket</code>. Reverts if price &lt; effective floor.</td>
+              <td>100% atomic execution on <code>FloorGuardDirectMarket</code>. Pulls exact USDC from buyer to seller. Reverts if listing is below floor.</td>
             </tr>
             <tr>
               <td><strong>Seaport 1.6 Zone</strong></td>
               <td><span class="status-pill valid">Enforced</span></td>
-              <td>Restricted orders naming <code>FloorGuardSeaportZone</code> validate USDC gross sum before and after fill.</td>
+              <td>Restricted orders naming <code>FloorGuardSeaportZone</code> verify consideration sum before and after fulfillment.</td>
             </tr>
             <tr>
-              <td><strong>Owner Peer-to-Peer Gifts</strong></td>
+              <td><strong>Owner Gifts & Inheritance</strong></td>
               <td><span class="status-pill valid">Allowed</span></td>
-              <td>Wallet-to-wallet transfers initiated by the NFT owner directly (non-operators) succeed without fees.</td>
+              <td>Direct peer-to-peer wallet transfers where <code>msg.sender == owner</code> succeed freely with zero fee or restriction.</td>
             </tr>
             <tr>
               <td><strong>Unrestricted Market Orders</strong></td>
               <td><span class="status-pill invalid">Blocked</span></td>
-              <td>Unrestricted Seaport or marketplace orders bypass the zone; the NFT validator fails the transfer.</td>
+              <td>Orders that skip the zone produce no transient authorization. When the marketplace conduit calls <code>transferFrom</code>, the NFT contract reverts.</td>
             </tr>
             <tr>
               <td><strong>Marketplace Escrow Risk</strong></td>
               <td><span class="status-pill valid">Zero Risk</span></td>
-              <td>The direct market never holds buyer USDC and has no sweep or withdrawal function.</td>
+              <td>The marketplace contract never holds tokens or balances. It has no sweep or withdraw function. There are no pool funds to hack.</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <div class="callout callout-warning">
-        <div class="callout-icon">⚠️</div>
+      <div class="callout callout-info">
+        <div class="callout-icon">💡</div>
         <div>
-          <strong>Non-Protected Paths:</strong> Unrestricted Seaport orders, marketplaces without adapter support (e.g. Magic Eden), and off-chain agreements paired with owner gifts are outside automated enforcement. Collections must register their contract with <code>FloorGuardTransferValidator</code> for complete coverage.
+          <strong>A Gift is a Gift, a Sale is a Sale:</strong> FloorGuard allows owners to transfer their NFTs to another wallet, a vault, or a friend without paying USDC. But when a marketplace operator attempts to move the token on behalf of a user, the transfer validator requires proof of a verified sale paying at least the floor.
         </div>
       </div>
     </section>
 
-    <!-- System Architecture -->
-    <section id="architecture">
+    <!-- Contract Topology -->
+    <section id="contracts">
       <div class="section-header">
-        <div class="section-tag">System Topology</div>
-        <h2 class="section-title">Contract Graph & Separation of Concerns</h2>
+        <div class="section-tag">System Architecture</div>
+        <h2 class="section-title">The Eight Core Contracts</h2>
         <p class="section-desc">
-          Price policy calculations are decoupled from marketplace execution adapters. Below are the 8 key contracts that form the protocol core:
+          FloorGuard cleanly separates price policy from marketplace adapters. Every contract has a strict, auditable boundary.
         </p>
       </div>
 
@@ -876,11 +876,11 @@
             <span class="contract-name">FloorGuardCore</span>
             <span class="contract-badge">Engine</span>
           </div>
-          <p class="contract-role">Stores collection floor policies, per-token overrides, and calculates <code>effectiveFloor</code>.</p>
+          <p class="contract-role">Stores collection policies, per-token overrides, and calculates the live <code>effectiveFloor</code>.</p>
           <ul class="contract-spec-list">
-            <li>Pinned immutable USDC token address</li>
-            <li>Enforces NonDecreasing and Fixed invariants</li>
-            <li>Cannot be upgraded or redirected</li>
+            <li>Pinned to Circle's verified USDC token</li>
+            <li>Enforces non-decreasing price rules</li>
+            <li>Immutable address; cannot be upgraded</li>
           </ul>
         </div>
 
@@ -889,11 +889,11 @@
             <span class="contract-name">FloorGuardDirectMarket</span>
             <span class="contract-badge">Marketplace</span>
           </div>
-          <p class="contract-role">Atomic USDC market for 1-of-1 NFT listings. Charges gross floor price directly to buyer.</p>
+          <p class="contract-role">The native atomic market. Buyers pay the exact USDC listing price, which is instantly routed.</p>
           <ul class="contract-spec-list">
             <li>Zero escrow custody; instant settlement</li>
-            <li>Pulls exact USDC to seller, royalty, & fee</li>
-            <li>Sellers can cancel immediately even if paused</li>
+            <li>Directly pays seller, royalty, and fee</li>
+            <li>Sellers can cancel immediately, even during pauses</li>
           </ul>
         </div>
 
@@ -902,24 +902,24 @@
             <span class="contract-name">FloorGuardSeaportZone</span>
             <span class="contract-badge">Hook Zone</span>
           </div>
-          <p class="contract-role">Restricted zone hook conforming to OpenSea / Seaport 1.6 specification.</p>
+          <p class="contract-role">Restricted zone contract conforming to OpenSea's Seaport 1.6 protocol specification.</p>
           <ul class="contract-spec-list">
-            <li>Validates <code>authorizeOrder</code> & <code>validateOrder</code></li>
-            <li>Verifies total consideration ≥ effective floor</li>
-            <li>Authorizes OpenSea conduit for final transfer</li>
+            <li>Executes <code>authorizeOrder</code> & <code>validateOrder</code></li>
+            <li>Validates consideration sum ≥ floor</li>
+            <li>Authorizes OpenSea conduit for transfer</li>
           </ul>
         </div>
 
         <div class="contract-card">
           <div class="contract-header">
             <span class="contract-name">FloorGuardTransferValidator</span>
-            <span class="contract-badge">Guard</span>
+            <span class="contract-badge">Security Guard</span>
           </div>
-          <p class="contract-role">Validates NFT transfers via transient storage (Cancun EIP-1153) during sale execution.</p>
+          <p class="contract-role">Validates NFT transfers via Ethereum Cancun transient storage (EIP-1153).</p>
           <ul class="contract-spec-list">
-            <li>Authorizations expire in the same transaction</li>
-            <li>Allows owner-initiated wallet transfers (gifts)</li>
-            <li>Blocks unapproved marketplace operators</li>
+            <li>Authorizations evaporate after transaction end</li>
+            <li>Permits owner peer-to-peer gifts</li>
+            <li>Rejects unapproved marketplace operators</li>
           </ul>
         </div>
 
@@ -928,10 +928,10 @@
             <span class="contract-name">FloorGuardNFT</span>
             <span class="contract-badge">Founding ERC-721</span>
           </div>
-          <p class="contract-role">The 69-token founding collection bound permanently to FloorGuardTransferValidator.</p>
+          <p class="contract-role">The 69-piece founding collection permanently wired to FloorGuardTransferValidator.</p>
           <ul class="contract-spec-list">
-            <li>Tokens #1 through #69 (strict cap)</li>
-            <li>Initial floor: 100,000 USDC</li>
+            <li>Strictly capped at 69 tokens (no extra mints)</li>
+            <li>Burns permanently disabled</li>
             <li>ERC-2981 royalty capped at 10%</li>
           </ul>
         </div>
@@ -945,20 +945,20 @@
           <ul class="contract-spec-list">
             <li>Collections opt-in to specific adapters</li>
             <li>Global adapters require timelock approval</li>
-            <li><code>verified</code> flag for ecosystem indexing</li>
+            <li>Immutable binding to FloorGuardCore</li>
           </ul>
         </div>
 
         <div class="contract-card">
           <div class="contract-header">
             <span class="contract-name">FloorGuardGovernance</span>
-            <span class="contract-badge">Admin Scheduler</span>
+            <span class="contract-badge">Scheduler</span>
           </div>
-          <p class="contract-role">Two-step ownable contract managing timelock interactions and emergency pauses.</p>
+          <p class="contract-role">Two-step ownable controller managing timelock interactions and emergency pauses.</p>
           <ul class="contract-spec-list">
-            <li>Guardian can execute emergency pauses instantly</li>
-            <li>Unpausing strictly requires 48-hour timelock</li>
-            <li>Designed for eventual Gnosis Safe ownership</li>
+            <li>Guardian can pause markets immediately</li>
+            <li>Unpausing strictly requires 48h timelock</li>
+            <li>Direct path to future Gnosis Safe multisig</li>
           </ul>
         </div>
 
@@ -967,109 +967,151 @@
             <span class="contract-name">FloorGuardTimelock</span>
             <span class="contract-badge">Timelock 48h</span>
           </div>
-          <p class="contract-role">OpenZeppelin TimelockController with a non-reducible 48-hour minimum execution window.</p>
+          <p class="contract-role">Enforces a non-reducible 48-hour delay on all privileged administrative operations.</p>
           <ul class="contract-spec-list">
-            <li>All administrative changes must queue for 48h</li>
-            <li>Community observers can audit queued calls</li>
+            <li>Every sensitive change is public for 48 hours</li>
+            <li>Community has ample time to audit changes</li>
             <li>Execution is open to any caller once matured</li>
           </ul>
         </div>
       </div>
     </section>
 
-    <!-- Developer Reference & API Calls -->
-    <section id="api-reference">
+    <!-- OpenSea & Seaport 1.6 Reality -->
+    <section id="opensea">
       <div class="section-header">
-        <div class="section-tag">Developer Guide</div>
-        <h2 class="section-title">Smart Contract API & Integration Calls</h2>
+        <div class="section-tag">OpenSea Deep Dive</div>
+        <h2 class="section-title">OpenSea & Seaport 1.6: The Practical Reality</h2>
         <p class="section-desc">
-          Integrate with FloorGuard directly using Solidity or JavaScript/TypeScript libraries (viem, ethers.js).
+          How FloorGuard integrates with OpenSea and why normal website listings fail without custom zone configuration.
+        </p>
+      </div>
+
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div>
+          <strong>Important for Sellers on OpenSea:</strong> OpenSea’s default website listing form generates <em>unrestricted</em> orders with no zone. Because an unrestricted order never calls <code>FloorGuardSeaportZone</code>, no sale authorization is written to transient storage. If a buyer tries to purchase a standard OpenSea listing, the transaction will revert!
+        </div>
+      </div>
+
+      <div class="data-table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Listing Method</th>
+              <th>How It Works</th>
+              <th>Recommended Use</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Native Direct Market</strong></td>
+              <td>List and buy directly on floorguardians.com. Atomic, zero-fee, and fully enforced out of the box.</td>
+              <td><span class="status-pill valid">Recommended</span> Primary trading surface for the collection.</td>
+            </tr>
+            <tr>
+              <td><strong>Seaport SDK Scripted Order</strong></td>
+              <td>Generate a cryptographically signed Seaport 1.6 order with <code>orderType: RESTRICTED</code> and <code>zone: FloorGuardSeaportZone</code>.</td>
+              <td><span class="status-pill valid">Ready</span> For programmatic trading, market makers, and dApp interfaces.</td>
+            </tr>
+            <tr>
+              <td><strong>OpenSea Seaport Hook Onboarding</strong></td>
+              <td>Register the collection with OpenSea’s Seaport Hooks program so OpenSea's frontend automatically attaches the zone.</td>
+              <td><span class="status-pill valid">In Progress</span> Standard procedure for launching protected collections on OpenSea.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Developer Reference -->
+    <section id="integration">
+      <div class="section-header">
+        <div class="section-tag">Integration Guide</div>
+        <h2 class="section-title">Developer Reference & Code Snippets</h2>
+        <p class="section-desc">
+          Interact with FloorGuard smart contracts using ethers.js, viem, or Solidity.
         </p>
       </div>
 
       <div class="code-container">
         <div class="code-header">
           <div class="code-tabs">
-            <button class="code-tab active" onclick="switchTab(this, 'tab-read')">1. Query Effective Floor</button>
-            <button class="code-tab" onclick="switchTab(this, 'tab-list')">2. List NFT (Direct Market)</button>
-            <button class="code-tab" onclick="switchTab(this, 'tab-buy')">3. Purchase NFT (Direct Market)</button>
+            <button class="code-tab active" onclick="switchTab(this, 'tab-read')">1. Query Floor</button>
+            <button class="code-tab" onclick="switchTab(this, 'tab-list')">2. Direct Market List</button>
+            <button class="code-tab" onclick="switchTab(this, 'tab-buy')">3. Direct Market Buy</button>
             <button class="code-tab" onclick="switchTab(this, 'tab-seaport')">4. Seaport 1.6 Order</button>
           </div>
           <button class="copy-btn" onclick="copyCurrentCode()">Copy Snippet</button>
         </div>
 
         <!-- Tab 1: Query -->
-        <pre id="tab-read" class="code-body"><code><span class="hl-cmt">// Query the required minimum floor in USDC (base units: 6 decimals)</span>
+        <pre id="tab-read" class="code-body"><code><span class="hl-cmt">// Read the current effective floor price for a collection token</span>
 <span class="hl-kw">import</span> { ethers } <span class="hl-kw">from</span> <span class="hl-str">"ethers"</span>;
 
 <span class="hl-kw">const</span> CORE_ABI = [
   <span class="hl-str">"function effectiveFloor(address collection, uint256 tokenId) external view returns (uint256)"</span>,
-  <span class="hl-str">"function collectionFloor(address collection) external view returns (uint256)"</span>,
-  <span class="hl-str">"function tokenFloorOverride(address collection, uint256 tokenId) external view returns (uint256)"</span>
+  <span class="hl-str">"function collectionFloor(address collection) external view returns (uint256)"</span>
 ];
 
-<span class="hl-kw">async function</span> <span class="hl-fn">getFloor</span>(coreContractAddress, collectionAddress, tokenId) {
+<span class="hl-kw">async function</span> <span class="hl-fn">checkPriceFloor</span>(coreAddress, collectionAddress, tokenId) {
   <span class="hl-kw">const</span> provider = <span class="hl-kw">new</span> ethers.JsonRpcProvider(process.env.RPC_URL);
-  <span class="hl-kw">const</span> core = <span class="hl-kw">new</span> ethers.Contract(coreContractAddress, CORE_ABI, provider);
+  <span class="hl-kw">const</span> core = <span class="hl-kw">new</span> ethers.Contract(coreAddress, CORE_ABI, provider);
 
   <span class="hl-kw">const</span> rawFloor = <span class="hl-kw">await</span> core.effectiveFloor(collectionAddress, tokenId);
   <span class="hl-kw">const</span> usdcAmount = ethers.formatUnits(rawFloor, <span class="hl-num">6</span>);
 
-  console.log(<span class="hl-str">`Token #${tokenId} effective floor: $${usdcAmount} USDC (${rawFloor.toString()} units)`</span>);
+  console.log(<span class="hl-str">`Token #${tokenId} Floor: $${usdcAmount} USDC`</span>);
   <span class="hl-kw">return</span> rawFloor;
 }</code></pre>
 
         <!-- Tab 2: List -->
-        <pre id="tab-list" class="code-body" style="display:none;"><code><span class="hl-cmt">// Step 1: Approve the FloorGuardDirectMarket to handle your NFT
-// Step 2: Call list() with a price at or above effectiveFloor</span>
+        <pre id="tab-list" class="code-body" style="display:none;"><code><span class="hl-cmt">// Approve the DirectMarket contract, then list at or above the floor</span>
 <span class="hl-kw">const</span> MARKET_ABI = [
   <span class="hl-str">"function list(address collection, uint256 tokenId, uint256 price, uint256 expiry) external returns (uint256 id)"</span>
 ];
 
-<span class="hl-kw">async function</span> <span class="hl-fn">listNft</span>(marketAddress, collectionAddress, tokenId, priceUsdc, daysValid) {
+<span class="hl-kw">async function</span> <span class="hl-fn">createListing</span>(marketAddress, collectionAddress, tokenId, priceUsdc, daysValid) {
   <span class="hl-kw">const</span> signer = <span class="hl-kw">await</span> provider.getSigner();
-  
-  <span class="hl-cmt">// Approve NFT first</span>
+
+  <span class="hl-cmt">// 1. Approve NFT</span>
   <span class="hl-kw">const</span> nft = <span class="hl-kw">new</span> ethers.Contract(collectionAddress, [<span class="hl-str">"function approve(address to, uint256 id) external"</span>], signer);
   <span class="hl-kw">await</span> (await nft.approve(marketAddress, tokenId)).wait();
 
-  <span class="hl-cmt">// Convert price (e.g. 100,000 USDC -> 100_000_000_000)</span>
+  <span class="hl-cmt">// 2. Submit listing (USDC has 6 decimals)</span>
   <span class="hl-kw">const</span> priceBaseUnits = ethers.parseUnits(priceUsdc.toString(), <span class="hl-num">6</span>);
   <span class="hl-kw">const</span> expiry = Math.floor(Date.now() / <span class="hl-num">1000</span>) + (daysValid * <span class="hl-num">86400</span>);
 
   <span class="hl-kw">const</span> market = <span class="hl-kw">new</span> ethers.Contract(marketAddress, MARKET_ABI, signer);
   <span class="hl-kw">const</span> tx = <span class="hl-kw">await</span> market.list(collectionAddress, tokenId, priceBaseUnits, expiry);
-  <span class="hl-kw">const</span> receipt = <span class="hl-kw">await</span> tx.wait();
-  
-  console.log(<span class="hl-str">"Listing successful! TX:"</span>, receipt.hash);
+  <span class="hl-kw">await</span> tx.wait();
+  console.log(<span class="hl-str">"Listing live on FloorGuard Direct Market!"</span>);
 }</code></pre>
 
         <!-- Tab 3: Buy -->
-        <pre id="tab-buy" class="code-body" style="display:none;"><code><span class="hl-cmt">// Step 1: Approve DirectMarket to spend buyer USDC
-// Step 2: Call buy(listingId)</span>
-<span class="hl-kw">async function</span> <span class="hl-fn">buyNft</span>(marketAddress, usdcAddress, listingId, priceBaseUnits) {
+        <pre id="tab-buy" class="code-body" style="display:none;"><code><span class="hl-cmt">// Approve USDC spending, then execute atomic purchase</span>
+<span class="hl-kw">async function</span> <span class="hl-fn">executePurchase</span>(marketAddress, usdcAddress, listingId, priceBaseUnits) {
   <span class="hl-kw">const</span> signer = <span class="hl-kw">await</span> provider.getSigner();
 
-  <span class="hl-cmt">// Approve USDC</span>
+  <span class="hl-cmt">// 1. Approve USDC</span>
   <span class="hl-kw">const</span> usdc = <span class="hl-kw">new</span> ethers.Contract(usdcAddress, [<span class="hl-str">"function approve(address spender, uint256 amount) external returns (bool)"</span>], signer);
   <span class="hl-kw">await</span> (await usdc.approve(marketAddress, priceBaseUnits)).wait();
 
-  <span class="hl-cmt">// Execute atomic purchase</span>
+  <span class="hl-cmt">// 2. Execute atomic buy</span>
   <span class="hl-kw">const</span> market = <span class="hl-kw">new</span> ethers.Contract(marketAddress, [<span class="hl-str">"function buy(uint256 id) external"</span>], signer);
   <span class="hl-kw">const</span> tx = <span class="hl-kw">await</span> market.buy(listingId);
-  <span class="hl-kw">const</span> receipt = <span class="hl-kw">await</span> tx.wait();
-
-  console.log(<span class="hl-str">"NFT acquired! Transfer verified by FloorGuardTransferValidator."</span>);
+  <span class="hl-kw">await</span> tx.wait();
+  console.log(<span class="hl-str">"Purchase complete! NFT transferred and floor verified."</span>);
 }</code></pre>
 
         <!-- Tab 4: Seaport -->
-        <pre id="tab-seaport" class="code-body" style="display:none;"><code><span class="hl-cmt">// Constructing a Seaport 1.6 restricted order for OpenSea</span>
+        <pre id="tab-seaport" class="code-body" style="display:none;"><code><span class="hl-cmt">// Construct a Seaport 1.6 restricted order for OpenSea integration</span>
 <span class="hl-kw">import</span> { OrderType, ItemType } <span class="hl-kw">from</span> <span class="hl-str">"@opensea/seaport-js/lib/constants"</span>;
 
 <span class="hl-kw">const</span> orderParameters = {
   offerer: sellerAddress,
-  zone: FLOORGUARD_SEAPORT_ZONE_ADDRESS, <span class="hl-cmt">// Required!</span>
-  orderType: OrderType.RESTRICTED,      <span class="hl-cmt">// Zone must be invoked</span>
+  zone: FLOORGUARD_SEAPORT_ZONE_ADDRESS, <span class="hl-cmt">// The FloorGuard zone hook</span>
+  orderType: OrderType.RESTRICTED,      <span class="hl-cmt">// Strictly required!</span>
   offer: [{
     itemType: ItemType.ERC721,
     token: NFT_COLLECTION_ADDRESS,
@@ -1085,68 +1127,18 @@
     endAmount: ethers.parseUnits(<span class="hl-str">"100000"</span>, <span class="hl-num">6</span>),
     recipient: sellerAddress
   }],
-  conduitKey: OPENSEA_CONDUIT_KEY        <span class="hl-cmt">// Validated by TransferValidator</span>
+  conduitKey: OPENSEA_CONDUIT_KEY
 };</code></pre>
-      </div>
-    </section>
-
-    <!-- Seaport 1.6 Integration Details -->
-    <section id="seaport">
-      <div class="section-header">
-        <div class="section-tag">Marketplace Architecture</div>
-        <h2 class="section-title">Seaport 1.6 Zone & OpenSea Compatibility</h2>
-        <p class="section-desc">
-          How FloorGuard enforces floors on Seaport protocol orders without custody or proprietary wrappers.
-        </p>
-      </div>
-
-      <div class="data-table-wrapper">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Order Component</th>
-              <th>Supported Specification</th>
-              <th>Validation & Rejection Rules</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Order Type</strong></td>
-              <td><code>OrderType.RESTRICTED</code></td>
-              <td>Unrestricted orders do not trigger the zone and are rejected by the NFT contract.</td>
-            </tr>
-            <tr>
-              <td><strong>Offer Item</strong></td>
-              <td>Exactly 1 resolved ERC-721 token</td>
-              <td>ERC-1155, bundles, and criteria-based wildcard offers revert immediately.</td>
-            </tr>
-            <tr>
-              <td><strong>Consideration Currency</strong></td>
-              <td>Pinned Circle USDC only</td>
-              <td>ETH, WETH, or unpinned stablecoins revert. Consideration sum must meet floor.</td>
-            </tr>
-            <tr>
-              <td><strong>Authorized Operator</strong></td>
-              <td>OpenSea Conduit or Seaport 1.6</td>
-              <td>Pinned Conduit (<code>0x1E0049783F008A0085193E00003D00cd54003c71</code>). Unknown conduits fail closed.</td>
-            </tr>
-            <tr>
-              <td><strong>Execution Hooks</strong></td>
-              <td><code>authorizeOrder</code> & <code>validateOrder</code></td>
-              <td>Pre-transfer checks set transient storage; post-transfer checks confirm received gross USDC.</td>
-            </tr>
-          </tbody>
-        </table>
       </div>
     </section>
 
     <!-- Governance & Security -->
     <section id="governance">
       <div class="section-header">
-        <div class="section-tag">Decentralization & Safety</div>
-        <h2 class="section-title">Governance Lifecycle & Security Invariants</h2>
+        <div class="section-tag">Security & Control</div>
+        <h2 class="section-title">Governance Boundaries & Emergency Controls</h2>
         <p class="section-desc">
-          Strict role boundaries protect users, creators, and buyers against administrative overreach or compromise.
+          No administrator should have absolute power over your assets. FloorGuard's security model guarantees that rogue keys cannot lower the floor or steal funds.
         </p>
       </div>
 
@@ -1156,53 +1148,52 @@
             <span class="contract-name">48-Hour Timelock</span>
             <span class="contract-badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3);">Delayed</span>
           </div>
-          <p class="contract-role">All sensitive updates require a 48-hour execution delay:</p>
+          <p class="contract-role">All sensitive protocol operations must queue for 48 hours before execution:</p>
           <ul class="contract-spec-list">
             <li>Raising the founding collection floor</li>
-            <li>Lowering GovernanceAdjustable floors</li>
-            <li>Changing market fees (capped at 10%)</li>
+            <li>Changing market protocol fees (max 10%)</li>
             <li>Approving new marketplace adapters</li>
-            <li>Unpausing sales paths</li>
+            <li>Unpausing markets after an emergency</li>
           </ul>
         </div>
 
         <div class="contract-card">
           <div class="contract-header">
-            <span class="contract-name">Guardian Pause</span>
-            <span class="contract-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.3);">Immediate</span>
+            <span class="contract-name">Guardian Circuit Breaker</span>
+            <span class="contract-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.3);">Instant</span>
           </div>
-          <p class="contract-role">Emergency controls for security incidents:</p>
+          <p class="contract-role">Emergency pause powers designed for rapid incident response:</p>
           <ul class="contract-spec-list">
-            <li>Guardian can pause DirectMarket and Seaport Zone instantly</li>
-            <li>Cannot unpause (requires 48h timelock)</li>
-            <li>Cannot transfer NFTs or seize funds</li>
-            <li>Sellers can still cancel listings during pause</li>
+            <li>Guardian can pause sales immediately</li>
+            <li>Guardian cannot unpause (requires 48h delay)</li>
+            <li>Cannot transfer user NFTs or seize funds</li>
+            <li>Sellers can still cancel their listings while paused</li>
           </ul>
         </div>
 
         <div class="contract-card">
           <div class="contract-header">
-            <span class="contract-name">Immutable Boundaries</span>
+            <span class="contract-name">Immutable Guarantees</span>
             <span class="contract-badge" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border-color: rgba(239, 68, 68, 0.3);">Permanent</span>
           </div>
-          <p class="contract-role">Guarantees that no admin, multisig, or timelock can alter:</p>
+          <p class="contract-role">Invariants that neither admins, timelocks, nor hackers can change:</p>
           <ul class="contract-spec-list">
-            <li>Cannot lower the founding 100,000 USDC floor</li>
-            <li>Cannot seize or burn minted NFTs</li>
-            <li>Cannot extract USDC from market (no balance held)</li>
-            <li>Cannot bypass 48-hour minimum timelock delay</li>
+            <li>The 100,000 USDC founding floor can never decrease</li>
+            <li>NFTs cannot be burned or arbitrarily seized</li>
+            <li>No funds can be drained from the market (zero balance)</li>
+            <li>The 48-hour timelock delay can never be shortened</li>
           </ul>
         </div>
       </div>
     </section>
 
-    <!-- Pinned Addresses -->
+    <!-- Network Addresses -->
     <section id="addresses">
       <div class="section-header">
-        <div class="section-tag">Network Constants</div>
-        <h2 class="section-title">Pinned Addresses & Reference Contracts</h2>
+        <div class="section-tag">Contract Constants</div>
+        <h2 class="section-title">Verified Addresses & Integrations</h2>
         <p class="section-desc">
-          Official contract addresses for Ethereum Mainnet and Sepolia Testnet.
+          Official contract references for Ethereum Mainnet and Sepolia Testnet.
         </p>
       </div>
 
@@ -1212,7 +1203,7 @@
             <tr>
               <th>Entity</th>
               <th>Network</th>
-              <th>Pinned Contract Address</th>
+              <th>Verified Address</th>
             </tr>
           </thead>
           <tbody>
@@ -1241,46 +1232,46 @@
       </div>
     </section>
 
-    <!-- FAQ Accordion -->
+    <!-- FAQ -->
     <section id="faq">
       <div class="section-header">
-        <div class="section-tag">Frequently Asked Questions</div>
-        <h2 class="section-title">Protocol Invariants & Technical Details</h2>
+        <div class="section-tag">Clear Answers</div>
+        <h2 class="section-title">Frequently Asked Questions</h2>
       </div>
 
       <div class="faq-list">
         <div class="faq-item open">
           <button class="faq-question">Can the administrator lower the founding 100,000 USDC floor?</button>
           <div class="faq-answer">
-            No. The founding collection floor is governed by a NonDecreasing price policy. The smart contracts hardcode this invariant: any transaction attempting to lower the floor reverts automatically, even if submitted by the contract owner or scheduled through the 48-hour timelock.
+            No. The founding collection is governed by a strict NonDecreasing price policy. Any transaction that attempts to lower the floor will automatically revert, even if submitted by the contract owner or scheduled through the 48-hour timelock.
           </div>
         </div>
 
         <div class="faq-item">
-          <button class="faq-question">Can I gift an NFT to another wallet without paying USDC?</button>
+          <button class="faq-question">Can I gift an NFT to a friend without paying USDC?</button>
           <div class="faq-answer">
-            Yes. Direct transfers from owner wallets (e.g. transfers where <code>msg.sender == owner</code>) are recognized as peer-to-peer gifts or inheritance and execute without requiring a sale authorization or USDC payment. Only operator-delegated transfers (marketplaces) require verified sale authorizations.
+            Yes. Direct wallet-to-wallet transfers where the caller is the current owner are recognized as gifts or inheritance and execute normally without requiring USDC. Only marketplace operators pulling tokens require verified sale authorization.
           </div>
         </div>
 
         <div class="faq-item">
-          <button class="faq-question">Why is the price floor denominated in USDC rather than ETH or WETH?</button>
+          <button class="faq-question">Why is the floor denominated in USDC rather than ETH?</button>
           <div class="faq-answer">
-            ETH and WETH fluctuate significantly in purchasing power and fiat terms. Pinned Circle USDC guarantees a fixed, predictable floor ($100,000 USD) that does not collapse during crypto market downturns. In addition, using a single pinned token eliminates complex oracle manipulation attack vectors.
+            ETH price volatility means an ETH-denominated floor can swing wildly in real purchasing power during market corrections. Pinned Circle USDC guarantees a stable, predictable $100,000 USD floor that never drops during crypto downturns. In addition, using a single pegged token eliminates complex oracle manipulation exploits.
           </div>
         </div>
 
         <div class="faq-item">
-          <button class="faq-question">What prevents an attacker from fulfilling an unrestricted order on OpenSea below floor?</button>
+          <button class="faq-question">What happens if someone tries to sell below floor on OpenSea?</button>
           <div class="faq-answer">
-            The founding NFT is permanently connected to <code>FloorGuardTransferValidator</code>. When an operator tries to move the NFT, the validator checks transient storage for an active authorization from an approved zone or direct market. Because unrestricted orders do not invoke the restricted zone, no authorization is generated, and the transfer fails closed.
+            The founding NFT is permanently connected to <code>FloorGuardTransferValidator</code>. When an operator tries to move the token, the validator checks transient storage for an active authorization from an approved zone. Because below-floor or unrestricted orders produce no authorization, the transfer fails closed and reverts.
           </div>
         </div>
 
         <div class="faq-item">
           <button class="faq-question">How are marketplace fees and creator royalties accounted for?</button>
           <div class="faq-answer">
-            The floor is enforced on the <strong>gross amount</strong> paid by the buyer. If an NFT is sold at the 100,000 USDC floor with a 5% royalty (5,000 USDC) and 0% protocol fee, the buyer pays the full 100,000 USDC. The creator receives 5,000 USDC and the seller receives 95,000 USDC. The floor test checks that the buyer paid at least the effective floor.
+            The floor is enforced on the <strong>gross purchase price</strong> paid by the buyer. If an NFT sells at the 100,000 USDC floor with a 5% royalty (5,000 USDC), the buyer pays the full 100,000 USDC. The creator receives 5,000 USDC and the seller receives 95,000 USDC.
           </div>
         </div>
       </div>
@@ -1294,7 +1285,7 @@
       <div class="footer-brand">
         <div style="font-weight: 800; font-size: 1.1rem; color: #fff;">FloorGuard Protocol</div>
         <div style="font-size: 0.85rem; color: var(--text-dim);">
-          Immutable NFT price floor architecture for Ethereum.
+          Immutable NFT price floor architecture on Ethereum.
         </div>
       </div>
       <ul class="footer-links">
