@@ -723,26 +723,31 @@
     </div>
 
     <!-- Core Metrics -->
+    <div style="text-align: center; margin-bottom: 1.25rem;">
+      <span style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--primary); background: rgba(56, 189, 248, 0.08); padding: 0.35rem 0.85rem; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.25);">
+        Launch Reference Example • Total Supply & Floors Configurable Per Collection
+      </span>
+    </div>
     <div class="metric-grid">
       <div class="metric-card">
-        <div class="metric-label">Founding Floor</div>
+        <div class="metric-label">Reference Floor</div>
         <div class="metric-value">100,000 USDC</div>
-        <div class="metric-sub">100,000,000,000 base units (6 decimals)</div>
+        <div class="metric-sub">Example founding floor (6 decimals)</div>
       </div>
       <div class="metric-card">
-        <div class="metric-label">Founding Supply</div>
-        <div class="metric-value">69 Tokens</div>
-        <div class="metric-sub">Permanent, hard-capped mint limit</div>
+        <div class="metric-label">Collection Supply</div>
+        <div class="metric-value">User-Defined</div>
+        <div class="metric-sub">69 tokens in launch example — any supply supported</div>
       </div>
       <div class="metric-card">
         <div class="metric-label">Floor Policy</div>
-        <div class="metric-value">Upward Only</div>
-        <div class="metric-sub">The floor can rise; it can never be lowered</div>
+        <div class="metric-value">NonDecreasing</div>
+        <div class="metric-sub">Floor can only rise, never drop</div>
       </div>
       <div class="metric-card">
         <div class="metric-label">Governance Delay</div>
         <div class="metric-value">48 Hours</div>
-        <div class="metric-sub">Mandatory queue on every sensitive action</div>
+        <div class="metric-sub">Mandatory timelock queue on admin changes</div>
       </div>
     </div>
 
@@ -759,6 +764,10 @@
 
         <div class="calc-grid">
           <div>
+            <div class="input-group">
+              <label class="input-label" for="calcSupply">Total Collection Supply (Tokens)</label>
+              <input type="number" id="calcSupply" class="input-field" value="69" min="1" step="1">
+            </div>
             <div class="input-group">
               <label class="input-label" for="calcPrice">Listing Price (USDC)</label>
               <input type="number" id="calcPrice" class="input-field" value="100000" min="0" step="1000">
@@ -779,7 +788,7 @@
               <span class="result-value">100,000.00 USDC</span>
             </div>
             <div class="result-row">
-              <span class="result-label">Validation Result:</span>
+              <span class="result-label">Floor Validation:</span>
               <span id="calcStatusPill" class="status-pill valid">✓ Passes Floor Check</span>
             </div>
             <div class="result-row">
@@ -797,6 +806,10 @@
             <div class="result-row">
               <span class="result-label">Net Seller Proceeds:</span>
               <span id="calcSellerProceeds" class="result-value highlight">95,000.00 USDC</span>
+            </div>
+            <div class="result-row">
+              <span class="result-label">Total Collection Floor Valuation:</span>
+              <span id="calcMarketCap" class="result-value" style="color: var(--primary);">6,900,000.00 USDC</span>
             </div>
           </div>
         </div>
@@ -926,12 +939,12 @@
         <div class="contract-card">
           <div class="contract-header">
             <span class="contract-name">FloorGuardNFT</span>
-            <span class="contract-badge">Founding ERC-721</span>
+            <span class="contract-badge">Configurable ERC-721</span>
           </div>
-          <p class="contract-role">The 69-piece founding collection permanently wired to FloorGuardTransferValidator.</p>
+          <p class="contract-role">Configurable-supply ERC-721 permanently bound to FloorGuardTransferValidator.</p>
           <ul class="contract-spec-list">
-            <li>Strictly capped at 69 tokens (no extra mints)</li>
-            <li>Burns permanently disabled</li>
+            <li>User-specified <code>maxSupply</code> (69 tokens in founding launch example)</li>
+            <li>Supports any collection size: 10, 100, 1,000, 10,000, or uncapped</li>
             <li>ERC-2981 royalty capped at 10%</li>
           </ul>
         </div>
@@ -1248,6 +1261,13 @@
         </div>
 
         <div class="faq-item">
+          <button class="faq-question">Is the protocol limited to 69 tokens, or can creators set their own total supply?</button>
+          <div class="faq-answer">
+            69 tokens is strictly an example for the founding launch collection. The protocol does not enforce a 69-token limit on other users. Creators can configure any <code>maxSupply</code> upon deployment (e.g. 100, 1,000, 10,000, or uncapped). Additionally, existing third-party ERC-721 collections of any supply can register with <code>FloorGuardRegistry</code> to enforce minimum price floors.
+          </div>
+        </div>
+
+        <div class="faq-item">
           <button class="faq-question">Can I gift an NFT to a friend without paying USDC?</button>
           <div class="faq-answer">
             Yes. Direct wallet-to-wallet transfers where the caller is the current owner are recognized as gifts or inheritance and execute normally without requiring USDC. Only marketplace operators pulling tokens require verified sale authorization.
@@ -1320,6 +1340,7 @@
     }
 
     // Interactive Calculator
+    const calcSupplyInput = document.getElementById('calcSupply');
     const calcPriceInput = document.getElementById('calcPrice');
     const calcRoyaltyInput = document.getElementById('calcRoyalty');
     const calcFeeInput = document.getElementById('calcFee');
@@ -1328,8 +1349,10 @@
     const calcRoyaltyAmt = document.getElementById('calcRoyaltyAmt');
     const calcFeeAmt = document.getElementById('calcFeeAmt');
     const calcSellerProceeds = document.getElementById('calcSellerProceeds');
+    const calcMarketCap = document.getElementById('calcMarketCap');
 
     function updateCalc() {
+      const supply = Math.max(parseInt(calcSupplyInput ? calcSupplyInput.value : 69) || 1, 1);
       const price = parseFloat(calcPriceInput.value) || 0;
       const royaltyPct = Math.min(Math.max(parseFloat(calcRoyaltyInput.value) || 0, 0), 10);
       const feeBps = Math.min(Math.max(parseInt(calcFeeInput.value) || 0, 0), 1000);
@@ -1338,11 +1361,15 @@
       const royalty = (price * royaltyPct) / 100;
       const fee = (price * feeBps) / 10000;
       const proceeds = price - royalty - fee;
+      const totalValuation = price * supply;
 
       calcGross.innerText = price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USDC';
       calcRoyaltyAmt.innerText = royalty.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USDC';
       calcFeeAmt.innerText = fee.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USDC';
       calcSellerProceeds.innerText = proceeds.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USDC';
+      if (calcMarketCap) {
+        calcMarketCap.innerText = totalValuation.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USDC';
+      }
 
       if (price >= floor) {
         calcStatusPill.className = 'status-pill valid';
@@ -1356,8 +1383,8 @@
     }
 
     if (calcPriceInput) {
-      [calcPriceInput, calcRoyaltyInput, calcFeeInput].forEach(inp => {
-        inp.addEventListener('input', updateCalc);
+      [calcSupplyInput, calcPriceInput, calcRoyaltyInput, calcFeeInput].forEach(inp => {
+        if (inp) inp.addEventListener('input', updateCalc);
       });
       updateCalc();
     }

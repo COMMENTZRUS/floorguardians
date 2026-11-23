@@ -8,9 +8,9 @@ WHAT IT IS
 
 FloorGuard is an Ethereum protocol that refuses an NFT sale when the price
 is below a recorded floor. The floor is denominated in one pinned USDC
-contract. The founding collection is 69 ERC-721 tokens. Each of those tokens
-has a floor of 100,000 USDC, which is 100000000000 base units because USDC
-uses 6 decimals.
+contract. The founding reference collection uses 69 ERC-721 tokens as an
+initial launch example, with a floor of 100,000 USDC, which is 100000000000 base units because USDC
+uses 6 decimals. Other users and creators can configure any total supply upon deployment.
 
 A sale is checked only on a path this protocol controls:
 
