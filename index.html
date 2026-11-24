@@ -730,9 +730,9 @@
     </div>
     <div class="metric-grid">
       <div class="metric-card">
-        <div class="metric-label">Reference Floor</div>
-        <div class="metric-value">100,000 USDC</div>
-        <div class="metric-sub">Example founding floor (6 decimals)</div>
+        <div class="metric-label">Collection Floor</div>
+        <div class="metric-value">User-Defined</div>
+        <div class="metric-sub">100,000 USDC in launch example — any floor supported</div>
       </div>
       <div class="metric-card">
         <div class="metric-label">Collection Supply</div>
@@ -758,14 +758,18 @@
           <div class="section-tag">Interactive Calculator</div>
           <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff;">Direct Market Sale & Fee Breakdown</h2>
           <p style="color: var(--text-muted); font-size: 0.95rem;">
-            Test listing prices against the 100,000 USDC floor. See exactly how gross buyer payments, creator royalties, and net seller proceeds are calculated on-chain.
+            Configure any immutable floor (defaulting to the 100,000 USDC launch example) and test listing prices against it. See how gross buyer payments, creator royalties, and net seller proceeds calculate on-chain.
           </p>
         </div>
 
         <div class="calc-grid">
           <div>
             <div class="input-group">
-              <label class="input-label" for="calcSupply">Total Collection Supply (Tokens)</label>
+              <label class="input-label" for="calcFloor">Collection Floor (USDC) — Example: 100,000</label>
+              <input type="number" id="calcFloor" class="input-field" value="100000" min="1" step="1000">
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="calcSupply">Total Collection Supply (Tokens) — Example: 69</label>
               <input type="number" id="calcSupply" class="input-field" value="69" min="1" step="1">
             </div>
             <div class="input-group">
@@ -785,7 +789,7 @@
           <div class="calc-result-box">
             <div class="result-row">
               <span class="result-label">Minimum Required Floor:</span>
-              <span class="result-value">100,000.00 USDC</span>
+              <span id="calcFloorDisplay" class="result-value">100,000.00 USDC</span>
             </div>
             <div class="result-row">
               <span class="result-label">Floor Validation:</span>
@@ -984,7 +988,7 @@
           <ul class="contract-spec-list">
             <li>Every sensitive change is public for 48 hours</li>
             <li>Community has ample time to audit changes</li>
-            <li>Execution is open to any caller once matured</li>
+            <li>Only FloorGuardGovernance can execute matured calls</li>
           </ul>
         </div>
       </div>
@@ -994,16 +998,16 @@
     <section id="opensea">
       <div class="section-header">
         <div class="section-tag">Marketplace Architecture</div>
-        <h2 class="section-title">OpenSea & Seaport 1.6: Official Launch Procedures</h2>
+        <h2 class="section-title">OpenSea & Seaport 1.6: Architecture & Limitations</h2>
         <p class="section-desc">
-          Follow the verified, four-step launch procedure below to launch your FloorGuard collection on OpenSea with guaranteed on-chain price floor enforcement.
+          FloorGuard enforces its floor natively on Ethereum via <code>FloorGuardDirectMarket</code> and a canonical <strong>Seaport 1.6</strong> restricted zone. Understand exactly how trading works across direct settlement, Seaport 1.6, and OpenSea's website.
         </p>
       </div>
 
       <div class="callout callout-info">
         <div class="callout-icon">ℹ️</div>
         <div>
-          <strong>Why Zone Configuration Matters:</strong> Standard OpenSea web listings generate <em>unrestricted</em> orders with no zone. Because an unrestricted order skips <code>FloorGuardSeaportZone</code>, no transient authorization is created, and the NFT contract fails closed. Completing the standard Seaport Hook onboarding ensures every OpenSea listing enforces the floor!
+          <strong>Important OpenSea Web Reality:</strong> Listings created on <code>opensea.io</code> use OpenSea's own <code>SignedZone</code> (or unrestricted orders), not custom third-party price-floor zones. Because those orders skip <code>FloorGuardSeaportZone</code>, no transient authorization is written and <code>FloorGuardTransferValidator</code> fails closed. Direct trading runs on <code>FloorGuardDirectMarket</code> or via Seaport 1.6 <code>FULL_RESTRICTED</code> orders targeting <code>FloorGuardSeaportZone</code> directly.
         </div>
       </div>
 
@@ -1011,82 +1015,82 @@
         <table class="data-table">
           <thead>
             <tr>
-              <th>Listing Venue</th>
+              <th>Trading Path</th>
               <th>How It Operates</th>
-              <th>Status & Recommended Use</th>
+              <th>Status & Limitations</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><strong>Native Direct Market</strong></td>
-              <td>Direct atomic listings on floorguardians.com. 0% protocol fee, zero custody, instant settlement.</td>
-              <td><span class="status-pill valid">Recommended</span> Primary zero-fee trading venue for the collection.</td>
+              <td>Atomic USDC-for-NFT listings on <code>FloorGuardDirectMarket</code>. 0% protocol fee, zero custody, instant settlement.</td>
+              <td><span class="status-pill valid">Primary Venue</span> Zero marketplace dependency; works out of the box.</td>
             </tr>
             <tr>
-              <td><strong>Seaport SDK Scripted Order</strong></td>
-              <td>Generate cryptographically signed EIP-712 Seaport 1.6 orders with <code>orderType: RESTRICTED</code> and <code>zone: FloorGuardSeaportZone</code>.</td>
-              <td><span class="status-pill valid">Production Ready</span> For market makers, automated liquidity, and dApp frontends.</td>
+              <td><strong>Seaport 1.6 Restricted Zone</strong></td>
+              <td>EIP-712 signed Seaport 1.6 orders with <code>orderType: FULL_RESTRICTED</code> and <code>zone: FloorGuardSeaportZone</code>, settled on canonical Seaport 1.6.</td>
+              <td><span class="status-pill valid">Supported</span> Seller listings in pinned USDC only (no WETH/ETH or buyer offers).</td>
             </tr>
             <tr>
-              <td><strong>OpenSea Seaport Hook Onboarding</strong></td>
-              <td>Associate <code>FloorGuardSeaportZone</code> with your collection in OpenSea Studio / Seaport Hooks API so web listings automatically attach the zone.</td>
-              <td><span class="status-pill valid">Verified Standard</span> Standard 4-step onboarding procedure for OpenSea integration.</td>
+              <td><strong>OpenSea Website &amp; API</strong></td>
+              <td><code>opensea.io</code> discovers metadata via Studio, but its web UI and Orderbook API enforce OpenSea's own <code>SignedZone</code> rather than arbitrary custom zones.</td>
+              <td><span class="status-pill invalid">Fails Closed</span> Vanilla web listings &amp; WETH bids revert on fulfillment unless OpenSea explicitly integrates the zone.</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- 4-Step OpenSea Launch Checklist Cards -->
+      <!-- 4-Step Launch Checklist Cards -->
       <div class="arch-grid" style="margin-top: 2rem;">
         <div class="contract-card">
           <div class="contract-header">
             <span class="contract-name">Step 1: Deploy & Verify</span>
             <span class="contract-badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">Contracts</span>
           </div>
-          <p class="contract-role">Deploy using <code>FloorGuardDeployer</code> on Sepolia or Mainnet and verify all contracts on Etherscan.</p>
+          <p class="contract-role">Deploy using <code>FloorGuardDeployer</code> on Sepolia or Mainnet with your chosen supply and immutable floor, then verify on Etherscan.</p>
           <ul class="contract-spec-list">
-            <li>OpenSea discovers ERC-721 metadata and symbol</li>
-            <li>Indexer confirms <code>ZoneInterface</code> (ERC-165) compatibility</li>
-            <li>Pinned USDC and Seaport addresses validated on-chain</li>
+            <li>OpenSea indexes ERC-721 metadata and token history</li>
+            <li>Confirms <code>ZoneInterface</code> (ERC-165) and ERC-2981 support</li>
+            <li>Pinned USDC, Seaport 1.6, and Conduit validated on-chain</li>
           </ul>
         </div>
 
         <div class="contract-card">
           <div class="contract-header">
-            <span class="contract-name">Step 2: OpenSea Studio Import</span>
-            <span class="contract-badge" style="background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border-color: rgba(99, 102, 241, 0.3);">Collection</span>
+            <span class="contract-name">Step 2: OpenSea Studio Profile</span>
+            <span class="contract-badge" style="background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border-color: rgba(99, 102, 241, 0.3);">Discovery</span>
           </div>
-          <p class="contract-role">Claim your collection page in OpenSea Studio using the deployer admin wallet (<code>FLOORGARD_ADMIN</code>).</p>
+          <p class="contract-role">Claim your collection page in OpenSea Studio using the admin wallet (<code>FLOORGARD_ADMIN</code>) for provenance and metadata display.</p>
           <ul class="contract-spec-list">
-            <li>Log into <code>opensea.io/studio</code> and import contract address</li>
-            <li>Upload collection avatar, header banner, and description</li>
-            <li>Configure ERC-2981 creator earnings payout address</li>
+            <li>Import contract address in <code>opensea.io/studio</code></li>
+            <li>Set collection branding, links, and direct market URL</li>
+            <li>Direct collectors to the official floor-protected venue</li>
           </ul>
         </div>
 
         <div class="contract-card">
           <div class="contract-header">
-            <span class="contract-name">Step 3: Hook Zone Association</span>
-            <span class="contract-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.3);">Seaport Hook</span>
+            <span class="contract-name">Step 3: Protected Listings</span>
+            <span class="contract-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.3);">Execution</span>
           </div>
-          <p class="contract-role">Associate <code>FloorGuardSeaportZone</code> as the collection's designated hook zone in OpenSea developer settings.</p>
+          <p class="contract-role">List via <code>FloorGuardDirectMarket</code> or sign Seaport 1.6 <code>FULL_RESTRICTED</code> orders targeting <code>FloorGuardSeaportZone</code>.</p>
           <ul class="contract-spec-list">
-            <li>Registers zone address with OpenSea's order builder</li>
-            <li>Enforces <code>orderType: RESTRICTED</code> on web listings</li>
-            <li>Ensures consideration is pinned Circle USDC only</li>
+            <li>Every sale enforces gross USDC &ge; effective floor</li>
+            <li>Blocks below-floor fills, WETH bids, and unauthorized routers</li>
+            <li>Owner-initiated wallet gifts pass freely without USDC</li>
           </ul>
         </div>
 
         <div class="contract-card">
           <div class="contract-header">
-            <span class="contract-name">Step 4: Execute & Fulfill</span>
+            <span class="contract-name">Step 4: Atomic Settlement</span>
             <span class="contract-badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3);">Trading</span>
           </div>
-          <p class="contract-role">Listings execute with atomic settlement through OpenSea's conduit or native Direct Market.</p>
+          <p class="contract-role">Orders settle atomically via <code>FloorGuardDirectMarket</code> or canonical Seaport 1.6 with zero contract custody.</p>
           <ul class="contract-spec-list">
-            <li>OpenSea Conduit (<code>0x1E00...3c71</code>) authorized during fill</li>
-            <li>Transfers revert automatically if gross payment &lt; floor</li>
-            <li>Zero escrow custody and instant USDC delivery to seller</li>
+            <li>Cancun transient storage authorizes a single exact transfer</li>
+            <li>Transfers revert automatically if gross USDC &lt; floor</li>
+            <li>Instant USDC delivery to seller and royalty receiver</li>
           </ul>
         </div>
       </div>
@@ -1265,7 +1269,7 @@
           </div>
           <p class="contract-role">Invariants that neither admins, timelocks, nor hackers can change:</p>
           <ul class="contract-spec-list">
-            <li>The 100,000 USDC founding floor can never decrease</li>
+            <li>Your collection's immutable floor (100,000 USDC in the launch example) can never decrease</li>
             <li>NFTs cannot be burned or arbitrarily seized</li>
             <li>No funds can be drained from the market (zero balance)</li>
             <li>The 48-hour timelock delay can never be shortened</li>
@@ -1328,9 +1332,9 @@
 
       <div class="faq-list">
         <div class="faq-item open">
-          <button class="faq-question">Can the administrator lower the founding 100,000 USDC floor?</button>
+          <button class="faq-question">Can creators set their own floor, and can an administrator ever lower it?</button>
           <div class="faq-answer">
-            No. The founding collection is governed by a strict NonDecreasing price policy. Any transaction that attempts to lower the floor will automatically revert, even if submitted by the contract owner or scheduled through the 48-hour timelock.
+            Yes — creators can set any immutable USDC floor they want for their collection (100,000 USDC is simply the founding reference example for the first collection). Once deployed under a <code>NonDecreasing</code> or <code>Fixed</code> policy, any transaction that attempts to lower the floor automatically reverts, even if submitted by the contract owner or scheduled through the 48-hour timelock.
           </div>
         </div>
 
@@ -1351,21 +1355,21 @@
         <div class="faq-item">
           <button class="faq-question">Why is the floor denominated in USDC rather than ETH?</button>
           <div class="faq-answer">
-            ETH price volatility means an ETH-denominated floor can swing wildly in real purchasing power during market corrections. Pinned Circle USDC guarantees a stable, predictable $100,000 USD floor that never drops during crypto downturns. In addition, using a single pegged token eliminates complex oracle manipulation exploits.
+            ETH price volatility means an ETH-denominated floor can swing wildly in real purchasing power during market corrections. Pinned Circle USDC guarantees a stable, predictable USD floor (such as $100,000 in the founding example) that never drops during crypto downturns. In addition, using a single pegged token eliminates complex oracle manipulation exploits.
           </div>
         </div>
 
         <div class="faq-item">
           <button class="faq-question">What happens if someone tries to sell below floor on OpenSea?</button>
           <div class="faq-answer">
-            The founding NFT is permanently connected to <code>FloorGuardTransferValidator</code>. When an operator tries to move the token, the validator checks transient storage for an active authorization from an approved zone. Because below-floor or unrestricted orders produce no authorization, the transfer fails closed and reverts.
+            The NFT is permanently connected to <code>FloorGuardTransferValidator</code>. When an operator tries to move the token, the validator checks transient storage for an active authorization from an approved market or zone. Because below-floor or unrestricted orders produce no authorization, the transfer fails closed and reverts.
           </div>
         </div>
 
         <div class="faq-item">
           <button class="faq-question">How are marketplace fees and creator royalties accounted for?</button>
           <div class="faq-answer">
-            The floor is enforced on the <strong>gross purchase price</strong> paid by the buyer. If an NFT sells at the 100,000 USDC floor with a 5% royalty (5,000 USDC), the buyer pays the full 100,000 USDC. The creator receives 5,000 USDC and the seller receives 95,000 USDC.
+            The floor is enforced on the <strong>gross purchase price</strong> paid by the buyer. For example, if an NFT sells at a 100,000 USDC floor with a 5% royalty (5,000 USDC), the buyer pays the full 100,000 USDC. The creator receives 5,000 USDC and the seller receives 95,000 USDC.
           </div>
         </div>
       </div>
@@ -1414,6 +1418,8 @@
     }
 
     // Interactive Calculator
+    const calcFloorInput = document.getElementById('calcFloor');
+    const calcFloorDisplay = document.getElementById('calcFloorDisplay');
     const calcSupplyInput = document.getElementById('calcSupply');
     const calcPriceInput = document.getElementById('calcPrice');
     const calcRoyaltyInput = document.getElementById('calcRoyalty');
@@ -1426,17 +1432,20 @@
     const calcMarketCap = document.getElementById('calcMarketCap');
 
     function updateCalc() {
+      const floor = Math.max(parseFloat(calcFloorInput ? calcFloorInput.value : 100000) || 1, 1);
       const supply = Math.max(parseInt(calcSupplyInput ? calcSupplyInput.value : 69) || 1, 1);
       const price = parseFloat(calcPriceInput.value) || 0;
       const royaltyPct = Math.min(Math.max(parseFloat(calcRoyaltyInput.value) || 0, 0), 10);
       const feeBps = Math.min(Math.max(parseInt(calcFeeInput.value) || 0, 0), 1000);
-      const floor = 100000;
 
       const royalty = (price * royaltyPct) / 100;
       const fee = (price * feeBps) / 10000;
       const proceeds = price - royalty - fee;
       const totalValuation = price * supply;
 
+      if (calcFloorDisplay) {
+        calcFloorDisplay.innerText = floor.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USDC';
+      }
       calcGross.innerText = price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USDC';
       calcRoyaltyAmt.innerText = royalty.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USDC';
       calcFeeAmt.innerText = fee.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USDC';
@@ -1451,13 +1460,13 @@
         calcSellerProceeds.className = 'result-value highlight';
       } else {
         calcStatusPill.className = 'status-pill invalid';
-        calcStatusPill.innerText = '✕ Below Floor ($100k min)';
+        calcStatusPill.innerText = '✕ Below Floor (' + floor.toLocaleString('en-US') + ' USDC min)';
         calcSellerProceeds.className = 'result-value';
       }
     }
 
     if (calcPriceInput) {
-      [calcSupplyInput, calcPriceInput, calcRoyaltyInput, calcFeeInput].forEach(inp => {
+      [calcFloorInput, calcSupplyInput, calcPriceInput, calcRoyaltyInput, calcFeeInput].forEach(inp => {
         if (inp) inp.addEventListener('input', updateCalc);
       });
       updateCalc();
