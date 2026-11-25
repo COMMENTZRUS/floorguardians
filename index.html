@@ -1346,8 +1346,109 @@
               <td>Canonical</td>
               <td><code>0x1E0049783F008A0085193E00003D00cd54003c71</code></td>
             </tr>
+            <tr>
+              <td><strong>OpenSea SignedZone 1.6</strong></td>
+              <td>Canonical (OpenSea UI)</td>
+              <td><code>0x000056F7000000EcE9003ca63978907a00FFD100</code></td>
+            </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- Live Sepolia Testnet Deployment -->
+      <div class="section-header" style="margin-top: 3rem; margin-bottom: 1.5rem;">
+        <div class="section-tag">Live Testnet Deployment</div>
+        <h3 style="font-size: 1.45rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">Verified Sepolia Contracts (5 USDC Test Floor)</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+          All 8 contracts are deployed on <strong>Ethereum Sepolia (Chain ID 11155111)</strong> with a <strong>5 USDC</strong> founding test floor and <strong>69</strong> max supply, source-verified on both Sepolia Etherscan and Sourcify. <em>Mainnet has not been deployed yet.</em>
+        </p>
+      </div>
+
+      <div class="data-table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Contract</th>
+              <th>Role</th>
+              <th>Verified Sepolia Address (Etherscan)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>FloorGuardNFT</strong></td>
+              <td>ERC-721 + ERC-2981 (69 max supply)</td>
+              <td><a href="https://sepolia.etherscan.io/address/0x0efdfd927cc5d1b3310dd75d64a7b475ec016413#code" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0x0eFDfD927Cc5D1B3310dD75d64a7B475eC016413</code></a></td>
+            </tr>
+            <tr>
+              <td><strong>FloorGuardDirectMarket</strong></td>
+              <td>Primary 0%-fee atomic USDC market</td>
+              <td><a href="https://sepolia.etherscan.io/address/0x1d3f9d9018e1884f948f2bea3434c7d6b950eaf6#code" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0x1D3f9D9018E1884F948F2BEa3434C7d6B950EaF6</code></a></td>
+            </tr>
+            <tr>
+              <td><strong>FloorGuardSeaportZone</strong></td>
+              <td>Hardened Seaport 1.6 restricted zone</td>
+              <td><a href="https://sepolia.etherscan.io/address/0xea22c4a2fba083e2a8d2fedde31200fedcb9a0a2#code" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0xea22c4A2fBa083e2A8d2fedDE31200fedCb9a0A2</code></a></td>
+            </tr>
+            <tr>
+              <td><strong>FloorGuardCore</strong></td>
+              <td>Immutable price-floor engine (5 USDC)</td>
+              <td><a href="https://sepolia.etherscan.io/address/0xd58aead993873c1c99e82278ae12da874a008f67#code" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0xD58AeAD993873c1C99e82278aE12dA874a008F67</code></a></td>
+            </tr>
+            <tr>
+              <td><strong>FloorGuardRegistry</strong></td>
+              <td>Collection &amp; adapter registry (locked)</td>
+              <td><a href="https://sepolia.etherscan.io/address/0x4de75486710de3c0b0d3bdcdc7958cd0fa4968f7#code" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0x4de75486710de3c0b0d3BDCdC7958Cd0fA4968F7</code></a></td>
+            </tr>
+            <tr>
+              <td><strong>FloorGuardTransferValidator</strong></td>
+              <td>Cancun EIP-1153 transfer guard (locked)</td>
+              <td><a href="https://sepolia.etherscan.io/address/0x91b1a13426ee48b9b47b2ed6fba89b1177fc7b83#code" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0x91B1a13426Ee48b9b47b2ed6FbA89B1177fC7B83</code></a></td>
+            </tr>
+            <tr>
+              <td><strong>FloorGuardGovernance</strong></td>
+              <td>Admin scheduler &amp; Guardian circuit breaker</td>
+              <td><a href="https://sepolia.etherscan.io/address/0x62b8788f4683498f22fe71efbfda4b59d75e0aaf#code" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0x62b8788f4683498f22fE71EFbFda4B59d75E0AAF</code></a></td>
+            </tr>
+            <tr>
+              <td><strong>FloorGuardTimelock</strong></td>
+              <td>48-hour minimum / 30-day maximum delay</td>
+              <td><a href="https://sepolia.etherscan.io/address/0x8ad276f02dbf0e0ff7b59990c41af2a2a1324994#code" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0x8Ad276F02DBf0e0ff7B59990C41af2a2a1324994</code></a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- OpenSea Testnets & Live On-Chain Verification -->
+      <div class="arch-grid" style="margin-top: 2rem;">
+        <div class="contract-card">
+          <div class="contract-header">
+            <span class="contract-name">Live Sepolia Proof Transactions</span>
+            <span class="contract-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.3);">Verified On-Chain</span>
+          </div>
+          <p class="contract-role">End-to-end live Sepolia transactions executed with real Circle Sepolia USDC:</p>
+          <ul class="contract-spec-list">
+            <li>Token #1 Mint: <a href="https://sepolia.etherscan.io/tx/0xfe877b5d8d0dca81a9900e3ecff6bc0cf155fdc0c7816ed7aec326ceb0bfab11" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0xfe87...ab11</code></a></li>
+            <li>Below-Floor Listing (4.999999 USDC): Reverted with <code>BelowFloor(4999999, 5000000)</code></li>
+            <li>Exact-Floor Listing (5.00 USDC): <a href="https://sepolia.etherscan.io/tx/0xe92cbe9418c432168f83b0280ed1aeafb1257644b7d5e501d41d11609f6abec7" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0xe92c...bec7</code></a></li>
+            <li>Live 5.00 USDC Atomic Sale (0 market balance): <a href="https://sepolia.etherscan.io/tx/0x91540a415654e40a68d87292b4154a308f279df304bee5bbce007a45110944a1" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0x9154...44a1</code></a></li>
+            <li>0-USDC Owner Wallet Gift: <a href="https://sepolia.etherscan.io/tx/0x8dcd566ca6497682b86b591e53dd646d66d58ede60d2d149e123ce4707cd749d" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0x8dcd...749d</code></a></li>
+          </ul>
+        </div>
+
+        <div class="contract-card">
+          <div class="contract-header">
+            <span class="contract-name">OpenSea Testnets &amp; Seaport 1.6 Testing</span>
+            <span class="contract-badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">Testnet Guide</span>
+          </div>
+          <p class="contract-role">Inspect the live Sepolia collection on OpenSea Testnets and verify Seaport 1.6 enforcement:</p>
+          <ul class="contract-spec-list">
+            <li>Token #1 on OpenSea Testnets: <a href="https://testnets.opensea.io/assets/sepolia/0x0efdfd927cc5d1b3310dd75d64a7b475ec016413/1" target="_blank" rel="noopener noreferrer" style="color: var(--primary);">View Sepolia Asset #1</a></li>
+            <li>OpenSea Studio Testnets Import: <a href="https://testnets.opensea.io/studio" target="_blank" rel="noopener noreferrer" style="color: var(--primary);">testnets.opensea.io/studio</a> (contract <code>0x0eFD...6413</code>)</li>
+            <li>Vanilla OpenSea UI listings &amp; WETH bids fail closed (<code>TransferNotPermitted</code> / <code>UnsupportedCurrency</code>)</li>
+            <li>Direct Seaport 1.6 <code>FULL_RESTRICTED</code> orders use zone <code>0xea22...a0A2</code> &amp; Circle Sepolia USDC (<code>0x1c7D...7238</code>)</li>
+            <li>Live Sepolia fork suite (<code>test/SepoliaFork.t.sol</code>): 10/10 passing against canonical Seaport 1.6</li>
+          </ul>
+        </div>
       </div>
     </section>
 
