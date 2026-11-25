@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src https://ethereum-sepolia-rpc.publicnode.com https://rpc.sepolia.org; base-uri 'self'; form-action 'none'; object-src 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src https://ethereum-rpc.publicnode.com https://eth.llamarpc.com https://ethereum-sepolia-rpc.publicnode.com https://rpc.sepolia.org; base-uri 'self'; form-action 'none'; object-src 'none';">
   <meta name="referrer" content="no-referrer">
   <title>FloorGuard Protocol | Immutable Floor Protection for Ethereum NFTs</title>
   <meta name="description" content="FloorGuard enforces a permanent, non-decreasing price floor on Ethereum NFTs denominated in USDC through atomic native listings and Seaport 1.6 restricted zones.">
@@ -825,7 +825,7 @@
         <span>FloorGuard</span>
       </a>
       <ul class="nav-links">
-        <li><a href="#trade">Trade (Sepolia)</a></li>
+        <li><a href="#trade">Trade</a></li>
         <li><a href="#how-it-works">How It Works</a></li>
         <li><a href="#contracts">Contracts</a></li>
         <li><a href="#integration">API & SDK</a></li>
@@ -838,7 +838,7 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
           GitHub
         </a>
-        <a href="#trade" class="btn btn-primary">Live Sepolia Market</a>
+        <a href="#trade" class="btn btn-primary">Live Market</a>
       </div>
     </div>
   </header>
@@ -893,21 +893,25 @@
       </div>
     </div>
 
-    <!-- Live Web3 Direct Market (Sepolia Testnet) -->
+    <!-- Live Web3 Direct Market (Mainnet & Sepolia) -->
     <section id="trade">
       <div class="market-panel">
         <div class="market-topbar">
           <div>
-            <div class="section-tag">Live On-Chain Testnet Market</div>
-            <h2 style="font-size: 1.55rem; font-weight: 800; color: #fff; margin-top: 0.25rem;">FloorGuard Direct Market (Sepolia)</h2>
+            <div class="section-tag">Live On-Chain Market • Mainnet &amp; Sepolia</div>
+            <h2 id="tradeHeading" style="font-size: 1.55rem; font-weight: 800; color: #fff; margin-top: 0.25rem;">FloorGuard Direct Market (Ethereum Mainnet)</h2>
             <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">
-              Interact directly with the verified Sepolia contracts using MetaMask, Rabby, or any EIP-1193 wallet. Zero protocol fee, zero escrow custody.
+              Interact directly with the verified FloorGuard contracts using MetaMask, Rabby, or any EIP-1193 wallet. Zero protocol fee, zero escrow custody.
             </p>
           </div>
           <div class="market-wallet-actions">
-            <span id="tradeNetworkBadge" class="status-pill valid">Sepolia (11155111)</span>
+            <select id="tradeNetSelect" class="input-field" aria-label="Select Network" style="width: auto; padding: 0.45rem 0.75rem; font-size: 0.84rem; font-family: var(--font-mono);">
+              <option value="mainnet" selected>Ethereum Mainnet (1)</option>
+              <option value="sepolia">Sepolia Testnet (11155111)</option>
+            </select>
+            <span id="tradeNetworkBadge" class="status-pill valid">Mainnet (1)</span>
             <button type="button" id="tradeRefreshBtn" class="btn btn-secondary">Refresh</button>
-            <button type="button" id="tradeSwitchChainBtn" class="btn btn-secondary" style="display:none;">Switch to Sepolia</button>
+            <button type="button" id="tradeSwitchChainBtn" class="btn btn-secondary" style="display:none;">Switch Network</button>
             <button type="button" id="tradeConnectBtn" class="btn btn-primary">Connect Wallet</button>
           </div>
         </div>
@@ -926,7 +930,7 @@
             <div id="tradeLivePaused" class="market-stat-value">Loading...</div>
           </div>
           <div class="market-stat">
-            <div class="market-stat-label">Your Sepolia USDC</div>
+            <div id="tradeUserUsdcLabel" class="market-stat-label">Your Mainnet USDC</div>
             <div id="tradeUserUsdc" class="market-stat-value">Connect wallet</div>
           </div>
         </div>
@@ -939,24 +943,24 @@
         <div class="market-listings-box">
           <div class="market-listings-header">
             <h3 style="font-size: 1.05rem; font-weight: 700; color: #fff;">Active Direct Market Listings</h3>
-            <span id="tradeOwnedSummary" style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">Reading live Sepolia state...</span>
+            <span id="tradeOwnedSummary" style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">Reading live chain state...</span>
           </div>
           <div id="tradeListingsContainer">
-            <p style="color: var(--text-dim); font-size: 0.9rem;">Loading live listings from Sepolia...</p>
+            <p style="color: var(--text-dim); font-size: 0.9rem;">Loading live listings...</p>
           </div>
         </div>
 
         <div class="market-actions-grid">
           <div class="market-action-card">
             <h3>Create Protected Listing</h3>
-            <p>Lists your FloorGuard NFT in Circle Sepolia USDC. The 4-argument <code>list()</code> call locks your current net seller proceeds against royalty/fee front-running.</p>
+            <p>Lists your FloorGuard NFT in pinned Circle USDC. The 4-argument <code>list()</code> call locks your current net seller proceeds against royalty/fee front-running.</p>
             <div class="input-group" style="margin-bottom: 0.35rem;">
               <label class="input-label" for="tradeListTokenId">Token ID</label>
               <input type="number" id="tradeListTokenId" class="input-field" value="1" min="1" step="1">
             </div>
             <div class="input-group" style="margin-bottom: 0.35rem;">
-              <label class="input-label" for="tradeListPrice">Listing Price (Sepolia USDC)</label>
-              <input type="number" id="tradeListPrice" class="input-field" value="5" min="0" step="0.5">
+              <label id="tradeListPriceLabel" class="input-label" for="tradeListPrice">Listing Price (Mainnet USDC)</label>
+              <input type="number" id="tradeListPrice" class="input-field" value="100000" min="0" step="1000">
             </div>
             <div class="input-group" style="margin-bottom: 0.35rem;">
               <label class="input-label" for="tradeListDays">Listing Duration (Days)</label>
@@ -978,7 +982,7 @@
               <input type="text" id="tradeGiftTo" class="input-field" placeholder="0x0000000000000000000000000000000000000000" autocomplete="off" spellcheck="false">
             </div>
             <div style="font-size: 0.8rem; color: var(--text-dim); line-height: 1.5;">
-              Only the current NFT owner can send a gift. Need test tokens? Claim free Circle Sepolia USDC at <a href="https://faucet.circle.com/" target="_blank" rel="noopener noreferrer" style="color: var(--primary);">faucet.circle.com</a>.
+              Only the current NFT owner can send a gift. Want to test free first? Switch the network dropdown above to <strong>Sepolia Testnet</strong> and claim test USDC at <a href="https://faucet.circle.com/" target="_blank" rel="noopener noreferrer" style="color: var(--primary);">faucet.circle.com</a>.
             </div>
             <button type="button" id="tradeGiftBtn" class="btn btn-secondary" style="width: 100%; justify-content: center; margin-top: auto;">Send 0-USDC Gift Transfer</button>
           </div>
@@ -1588,12 +1592,75 @@
         </table>
       </div>
 
+      <!-- Live Ethereum Mainnet Deployment -->
+      <div class="section-header" style="margin-top: 3rem; margin-bottom: 1.5rem;">
+        <div class="section-tag">Live Ethereum Mainnet</div>
+        <h3 style="font-size: 1.45rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">Verified Mainnet Contracts (100,000 USDC Floor • 69 Max Supply)</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+          All 8 founding protocol contracts are live on <strong>Ethereum Mainnet (Chain ID 1)</strong>, permanently locked, and source-verified on both Etherscan and Sourcify.
+        </p>
+      </div>
+
+      <div class="data-table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Contract</th>
+              <th>Role</th>
+              <th>Verified Mainnet Address (Etherscan)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>FloorGuardNFT</strong></td>
+              <td>Floor Guardians ERC-721 + ERC-2981 (69 max supply)</td>
+              <td><a href="https://etherscan.io/address/0xf972cb947cac1ba60cba2e2e6c80e07de84d0033#code" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0xF972CB947CAC1Ba60cBA2E2e6C80e07de84d0033</code></a></td>
+            </tr>
+            <tr>
+              <td><strong>FloorGuardDirectMarket</strong></td>
+              <td>Primary 0%-fee atomic Mainnet USDC market</td>
+              <td><a href="https://etherscan.io/address/0x6910d2035d5df8ed0a830fe48ae0babf632ffe5d#code" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0x6910d2035d5dF8ED0A830fE48AE0baBF632ffe5d</code></a></td>
+            </tr>
+            <tr>
+              <td><strong>FloorGuardSeaportZone</strong></td>
+              <td>Hardened Seaport 1.6 restricted zone</td>
+              <td><a href="https://etherscan.io/address/0x69767b43d38222a7d35003b0813fdb73df7ffbc5#code" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0x69767B43d38222A7D35003b0813FDB73DF7fFbc5</code></a></td>
+            </tr>
+            <tr>
+              <td><strong>FloorGuardCore</strong></td>
+              <td>Immutable price-floor engine (100,000 USDC)</td>
+              <td><a href="https://etherscan.io/address/0x05cbf4513d56e47ba2872988a462f23394a4854f#code" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0x05Cbf4513d56e47ba2872988a462F23394A4854f</code></a></td>
+            </tr>
+            <tr>
+              <td><strong>FloorGuardRegistry</strong></td>
+              <td>Collection &amp; adapter registry (locked)</td>
+              <td><a href="https://etherscan.io/address/0x7d038f3452887855fd6a61ce3b194ba44a387482#code" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0x7d038F3452887855fD6a61Ce3b194Ba44a387482</code></a></td>
+            </tr>
+            <tr>
+              <td><strong>FloorGuardTransferValidator</strong></td>
+              <td>Cancun EIP-1153 transfer guard (locked)</td>
+              <td><a href="https://etherscan.io/address/0xffa56ed239cda1d2c81107a1f19e5b4ee2dec23d#code" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0xFfa56ED239cDa1D2c81107A1F19E5b4EE2dEC23D</code></a></td>
+            </tr>
+            <tr>
+              <td><strong>FloorGuardGovernance</strong></td>
+              <td>Admin scheduler &amp; Guardian circuit breaker</td>
+              <td><a href="https://etherscan.io/address/0xd1a7b56d00a95b1492618fb2cf81ddcbfa06a980#code" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0xD1a7B56d00A95B1492618Fb2CF81DdcBFA06a980</code></a></td>
+            </tr>
+            <tr>
+              <td><strong>FloorGuardTimelock</strong></td>
+              <td>48-hour minimum / 30-day maximum delay</td>
+              <td><a href="https://etherscan.io/address/0x305bf3e0f113ac0d2faf6b44a7f743dd661a6f60#code" target="_blank" rel="noopener noreferrer" style="color: var(--primary);"><code>0x305BF3e0f113Ac0d2FaF6B44a7f743dD661A6F60</code></a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       <!-- Live Sepolia Testnet Deployment -->
       <div class="section-header" style="margin-top: 3rem; margin-bottom: 1.5rem;">
-        <div class="section-tag">Live Testnet Deployment</div>
+        <div class="section-tag">Live Testnet Rehearsal</div>
         <h3 style="font-size: 1.45rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">Verified Sepolia Contracts (5 USDC Test Floor)</h3>
         <p style="color: var(--text-muted); font-size: 0.95rem;">
-          All 8 contracts are deployed on <strong>Ethereum Sepolia (Chain ID 11155111)</strong> with a <strong>5 USDC</strong> founding test floor and <strong>69</strong> max supply, source-verified on both Sepolia Etherscan and Sourcify. <em>Mainnet has not been deployed yet.</em>
+          Public rehearsal deployment on <strong>Ethereum Sepolia (Chain ID 11155111)</strong> with a <strong>5 USDC</strong> founding test floor and <strong>69</strong> max supply, verified on Sepolia Etherscan and Sourcify for free collector testing.
         </p>
       </div>
 
@@ -1870,20 +1937,52 @@
     });
 
     // =========================================================================
-    // Live Web3 Direct Market UI (Sepolia Testnet — Zero-Dependency EIP-1193)
+    // Live Web3 Direct Market UI (Mainnet & Sepolia — Zero-Dependency EIP-1193)
     // =========================================================================
     (() => {
-      const SEPOLIA_CHAIN_ID_HEX = '0xaa36a7'; // 11155111
-      const RPC_URLS = [
-        'https://ethereum-sepolia-rpc.publicnode.com',
-        'https://rpc.sepolia.org'
-      ];
-      const ADDR = {
-        usdc: '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238',
-        core: '0xD58AeAD993873c1C99e82278aE12dA874a008F67',
-        nft: '0x0eFDfD927Cc5D1B3310dD75d64a7B475eC016413',
-        market: '0x1D3f9D9018E1884F948F2BEa3434C7d6B950EaF6'
+      const NETWORKS = {
+        mainnet: {
+          key: 'mainnet',
+          label: 'Ethereum Mainnet',
+          shortLabel: 'Mainnet (1)',
+          chainIdHex: '0x1',
+          explorer: 'https://etherscan.io',
+          defaultFloor: 100000000000n,
+          defaultPriceInput: '100000',
+          priceStep: '1000',
+          rpcs: [
+            'https://ethereum-rpc.publicnode.com',
+            'https://eth.llamarpc.com'
+          ],
+          addr: {
+            usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+            core: '0x05Cbf4513d56e47ba2872988a462F23394A4854f',
+            nft: '0xF972CB947CAC1Ba60cBA2E2e6C80e07de84d0033',
+            market: '0x6910d2035d5dF8ED0A830fE48AE0baBF632ffe5d'
+          }
+        },
+        sepolia: {
+          key: 'sepolia',
+          label: 'Sepolia Testnet',
+          shortLabel: 'Sepolia (11155111)',
+          chainIdHex: '0xaa36a7',
+          explorer: 'https://sepolia.etherscan.io',
+          defaultFloor: 5000000n,
+          defaultPriceInput: '5',
+          priceStep: '0.5',
+          rpcs: [
+            'https://ethereum-sepolia-rpc.publicnode.com',
+            'https://rpc.sepolia.org'
+          ],
+          addr: {
+            usdc: '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238',
+            core: '0xD58AeAD993873c1C99e82278aE12dA874a008F67',
+            nft: '0x0eFDfD927Cc5D1B3310dD75d64a7B475eC016413',
+            market: '0x1D3f9D9018E1884F948F2BEa3434C7d6B950EaF6'
+          }
+        }
       };
+
       // Verified 4-byte selectors (cast sig)
       const SEL = {
         collectionFloor: '0x92401d82',
@@ -1907,6 +2006,10 @@
       };
 
       const el = {
+        netSelect: document.getElementById('tradeNetSelect'),
+        heading: document.getElementById('tradeHeading'),
+        userUsdcLabel: document.getElementById('tradeUserUsdcLabel'),
+        listPriceLabel: document.getElementById('tradeListPriceLabel'),
         connectBtn: document.getElementById('tradeConnectBtn'),
         switchBtn: document.getElementById('tradeSwitchChainBtn'),
         refreshBtn: document.getElementById('tradeRefreshBtn'),
@@ -1931,9 +2034,10 @@
       };
       if (!el.connectBtn) return;
 
+      let activeNet = NETWORKS.mainnet;
       let connectedAccount = null;
       let currentChainId = null;
-      let liveCollectionFloor = 5000000n;
+      let liveCollectionFloor = activeNet.defaultFloor;
       let rpcReqId = 1;
 
       function padUint(val) {
@@ -1982,7 +2086,7 @@
         el.statusBar.className = 'market-status-bar visible' + (type ? ' ' + type : '');
         el.statusText.textContent = message;
         if (txHash && /^0x[0-9a-fA-F]{64}$/.test(txHash)) {
-          el.statusLink.href = 'https://sepolia.etherscan.io/tx/' + txHash;
+          el.statusLink.href = activeNet.explorer + '/tx/' + txHash;
           el.statusLink.textContent = 'View tx ' + txHash.slice(0, 10) + '... on Etherscan';
           el.statusLink.style.display = 'inline';
         } else {
@@ -2004,7 +2108,7 @@
 
       async function rpcCall(method, params) {
         let lastErr = null;
-        for (const url of RPC_URLS) {
+        for (const url of activeNet.rpcs) {
           try {
             const res = await fetch(url, {
               method: 'POST',
@@ -2019,7 +2123,7 @@
             lastErr = e;
           }
         }
-        throw lastErr || new Error('Unable to reach Sepolia RPC');
+        throw lastErr || new Error('Unable to reach ' + activeNet.label + ' RPC');
       }
 
       async function ethCall(to, data) {
@@ -2052,9 +2156,9 @@
         }
       }
 
-      async function ensureSepoliaWallet() {
+      async function ensureTargetWallet() {
         if (!window.ethereum) {
-          setStatus('No browser wallet detected. Install MetaMask or Rabby to transact on Sepolia.', 'error');
+          setStatus('No browser wallet detected. Install MetaMask or Rabby to transact.', 'error');
           return false;
         }
         if (!connectedAccount) {
@@ -2062,11 +2166,11 @@
           if (!connectedAccount) return false;
         }
         currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
-        if (currentChainId.toLowerCase() !== SEPOLIA_CHAIN_ID_HEX) {
-          await switchToSepolia();
+        if (currentChainId.toLowerCase() !== activeNet.chainIdHex) {
+          await switchToActiveNet();
           currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
-          if (currentChainId.toLowerCase() !== SEPOLIA_CHAIN_ID_HEX) {
-            setStatus('Please switch your wallet network to Ethereum Sepolia (11155111).', 'error');
+          if (currentChainId.toLowerCase() !== activeNet.chainIdHex) {
+            setStatus('Please switch your wallet network to ' + activeNet.label + '.', 'error');
             return false;
           }
         }
@@ -2079,22 +2183,26 @@
           method: 'eth_sendTransaction',
           params: [{ from: connectedAccount, to, data }]
         });
-        setStatus(label + ' submitted — waiting for Sepolia confirmation...', '', txHash);
+        setStatus(label + ' submitted — waiting for ' + activeNet.label + ' confirmation...', '', txHash);
         await waitForReceipt(txHash);
         return txHash;
       }
 
       function updateWalletChrome() {
+        if (el.heading) el.heading.textContent = 'FloorGuard Direct Market (' + activeNet.label + ')';
+        if (el.userUsdcLabel) el.userUsdcLabel.textContent = 'Your ' + (activeNet.key === 'mainnet' ? 'Mainnet' : 'Sepolia') + ' USDC';
+        if (el.listPriceLabel) el.listPriceLabel.textContent = 'Listing Price (' + (activeNet.key === 'mainnet' ? 'Mainnet' : 'Sepolia') + ' USDC)';
         if (connectedAccount) {
           el.connectBtn.textContent = shortAddr(connectedAccount);
         } else {
           el.connectBtn.textContent = 'Connect Wallet';
           el.userUsdc.textContent = 'Connect wallet';
         }
-        const wrongChain = connectedAccount && currentChainId && currentChainId.toLowerCase() !== SEPOLIA_CHAIN_ID_HEX;
+        const wrongChain = connectedAccount && currentChainId && currentChainId.toLowerCase() !== activeNet.chainIdHex;
         el.switchBtn.style.display = wrongChain ? 'inline-flex' : 'none';
+        el.switchBtn.textContent = 'Switch to ' + (activeNet.key === 'mainnet' ? 'Mainnet' : 'Sepolia');
         el.networkBadge.className = 'status-pill ' + (wrongChain ? 'invalid' : 'valid');
-        el.networkBadge.textContent = wrongChain ? 'Wrong Network' : 'Sepolia (11155111)';
+        el.networkBadge.textContent = wrongChain ? 'Wrong Network' : activeNet.shortLabel;
       }
 
       async function connectWallet() {
@@ -2108,7 +2216,7 @@
           currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
           updateWalletChrome();
           if (connectedAccount) {
-            setStatus('Connected ' + shortAddr(connectedAccount) + ' — loading balances & listings...', 'success');
+            setStatus('Connected ' + shortAddr(connectedAccount) + ' — loading ' + activeNet.label + ' state...', 'success');
             await refreshMarket();
           }
         } catch (err) {
@@ -2116,14 +2224,14 @@
         }
       }
 
-      async function switchToSepolia() {
+      async function switchToActiveNet() {
         if (!window.ethereum) return;
         try {
           await window.ethereum.request({
             method: 'wallet_switchEthereumChain',
-            params: [{ chainId: SEPOLIA_CHAIN_ID_HEX }]
+            params: [{ chainId: activeNet.chainIdHex }]
           });
-          currentChainId = SEPOLIA_CHAIN_ID_HEX;
+          currentChainId = activeNet.chainIdHex;
           updateWalletChrome();
         } catch (err) {
           setStatus(friendlyError(err), 'error');
@@ -2136,23 +2244,23 @@
 
       async function handleBuy(listing) {
         try {
-          if (!(await ensureSepoliaWallet())) return;
+          if (!(await ensureTargetWallet())) return;
           if (connectedAccount === listing.seller) {
             setStatus('You are the seller of this listing — use Cancel Listing instead.', 'error');
             return;
           }
-          const balHex = await ethCall(ADDR.usdc, SEL.balanceOf + padAddr(connectedAccount));
+          const balHex = await ethCall(activeNet.addr.usdc, SEL.balanceOf + padAddr(connectedAccount));
           const bal = decodeWord(balHex, 0);
           if (bal < listing.price) {
-            setStatus('Insufficient Circle Sepolia USDC (' + formatUsdc(bal) + ' available, need ' + formatUsdc(listing.price) + '). Claim free USDC at faucet.circle.com.', 'error');
+            setStatus('Insufficient Circle USDC on ' + activeNet.label + ' (' + formatUsdc(bal) + ' available, need ' + formatUsdc(listing.price) + ').', 'error');
             return;
           }
-          const allowHex = await ethCall(ADDR.usdc, SEL.allowance + padAddr(connectedAccount) + padAddr(ADDR.market));
+          const allowHex = await ethCall(activeNet.addr.usdc, SEL.allowance + padAddr(connectedAccount) + padAddr(activeNet.addr.market));
           const allowance = decodeWord(allowHex, 0);
           if (allowance < listing.price) {
-            await sendTx(ADDR.usdc, SEL.approve + padAddr(ADDR.market) + padUint(listing.price), 'Approving ' + formatUsdc(listing.price));
+            await sendTx(activeNet.addr.usdc, SEL.approve + padAddr(activeNet.addr.market) + padUint(listing.price), 'Approving ' + formatUsdc(listing.price));
           }
-          const buyHash = await sendTx(ADDR.market, SEL.buy + padUint(listing.id), 'Buying Token #' + listing.tokenId + ' for ' + formatUsdc(listing.price));
+          const buyHash = await sendTx(activeNet.addr.market, SEL.buy + padUint(listing.id), 'Buying Token #' + listing.tokenId + ' for ' + formatUsdc(listing.price));
           setStatus('Purchase settled! Token #' + listing.tokenId + ' delivered for ' + formatUsdc(listing.price) + '.', 'success', buyHash);
           await refreshMarket();
         } catch (err) {
@@ -2162,8 +2270,8 @@
 
       async function handleCancel(listingId) {
         try {
-          if (!(await ensureSepoliaWallet())) return;
-          const hash = await sendTx(ADDR.market, SEL.cancel + padUint(listingId), 'Cancelling Listing #' + listingId);
+          if (!(await ensureTargetWallet())) return;
+          const hash = await sendTx(activeNet.addr.market, SEL.cancel + padUint(listingId), 'Cancelling Listing #' + listingId);
           setStatus('Listing #' + listingId + ' cancelled.', 'success', hash);
           await refreshMarket();
         } catch (err) {
@@ -2173,7 +2281,7 @@
 
       async function handleList() {
         try {
-          if (!(await ensureSepoliaWallet())) return;
+          if (!(await ensureTargetWallet())) return;
           const tokenId = parseInt(el.listTokenId.value, 10);
           const days = parseInt(el.listDays.value, 10);
           const price = parseUsdc(el.listPrice.value);
@@ -2189,20 +2297,20 @@
             setStatus('Enter a valid duration in days (>= 1).', 'error');
             return;
           }
-          const ownerHex = await ethCall(ADDR.nft, SEL.ownerOf + padUint(tokenId));
+          const ownerHex = await ethCall(activeNet.addr.nft, SEL.ownerOf + padUint(tokenId));
           const owner = decodeAddr(ownerHex, 0);
           if (owner !== connectedAccount) {
             setStatus('Connected wallet does not own Token #' + tokenId + ' (owner: ' + shortAddr(owner) + ').', 'error');
             return;
           }
-          const approvedHex = await ethCall(ADDR.nft, SEL.isApprovedForAll + padAddr(connectedAccount) + padAddr(ADDR.market));
+          const approvedHex = await ethCall(activeNet.addr.nft, SEL.isApprovedForAll + padAddr(connectedAccount) + padAddr(activeNet.addr.market));
           if (decodeWord(approvedHex, 0) === 0n) {
-            await sendTx(ADDR.nft, SEL.setApprovalForAll + padAddr(ADDR.market) + padBool(true), 'Approving FloorGuardDirectMarket for NFTs');
+            await sendTx(activeNet.addr.nft, SEL.setApprovalForAll + padAddr(activeNet.addr.market) + padBool(true), 'Approving FloorGuardDirectMarket for NFTs');
           }
           const expiry = BigInt(Math.floor(Date.now() / 1000) + days * 86400);
           const listHash = await sendTx(
-            ADDR.market,
-            SEL.list + padAddr(ADDR.nft) + padUint(tokenId) + padUint(price) + padUint(expiry),
+            activeNet.addr.market,
+            SEL.list + padAddr(activeNet.addr.nft) + padUint(tokenId) + padUint(price) + padUint(expiry),
             'Creating Listing for Token #' + tokenId + ' at ' + formatUsdc(price)
           );
           setStatus('Listing created for Token #' + tokenId + ' at ' + formatUsdc(price) + '!', 'success', listHash);
@@ -2214,7 +2322,7 @@
 
       async function handleGift() {
         try {
-          if (!(await ensureSepoliaWallet())) return;
+          if (!(await ensureTargetWallet())) return;
           const tokenId = parseInt(el.giftTokenId.value, 10);
           const recipient = (el.giftTo.value || '').trim();
           if (!Number.isInteger(tokenId) || tokenId < 1) {
@@ -2225,14 +2333,14 @@
             setStatus('Enter a valid non-zero Ethereum recipient address (0x...).', 'error');
             return;
           }
-          const ownerHex = await ethCall(ADDR.nft, SEL.ownerOf + padUint(tokenId));
+          const ownerHex = await ethCall(activeNet.addr.nft, SEL.ownerOf + padUint(tokenId));
           const owner = decodeAddr(ownerHex, 0);
           if (owner !== connectedAccount) {
             setStatus('Only the current owner (' + shortAddr(owner) + ') can gift Token #' + tokenId + '.', 'error');
             return;
           }
           const giftHash = await sendTx(
-            ADDR.nft,
+            activeNet.addr.nft,
             SEL.transferFrom + padAddr(connectedAccount) + padAddr(recipient) + padUint(tokenId),
             'Sending 0-USDC Gift of Token #' + tokenId + ' to ' + shortAddr(recipient)
           );
@@ -2245,14 +2353,16 @@
 
       async function refreshMarket() {
         el.refreshBtn.disabled = true;
+        const net = activeNet;
         try {
           const [floorHex, mintedHex, maxSupplyHex, pausedHex, nextIdHex] = await Promise.all([
-            ethCall(ADDR.core, SEL.collectionFloor + padAddr(ADDR.nft)),
-            ethCall(ADDR.nft, SEL.minted),
-            ethCall(ADDR.nft, SEL.maxSupply),
-            ethCall(ADDR.market, SEL.paused),
-            ethCall(ADDR.market, SEL.nextListingId)
+            ethCall(net.addr.core, SEL.collectionFloor + padAddr(net.addr.nft)),
+            ethCall(net.addr.nft, SEL.minted),
+            ethCall(net.addr.nft, SEL.maxSupply),
+            ethCall(net.addr.market, SEL.paused),
+            ethCall(net.addr.market, SEL.nextListingId)
           ]);
+          if (net !== activeNet) return;
 
           liveCollectionFloor = decodeWord(floorHex, 0);
           const minted = Number(decodeWord(mintedHex, 0));
@@ -2267,33 +2377,31 @@
           updateListHint();
 
           if (connectedAccount) {
-            const usdcHex = await ethCall(ADDR.usdc, SEL.balanceOf + padAddr(connectedAccount));
+            const usdcHex = await ethCall(net.addr.usdc, SEL.balanceOf + padAddr(connectedAccount));
             el.userUsdc.textContent = formatUsdc(decodeWord(usdcHex, 0));
           }
 
-          // Inspect owned tokens (capped to first 50 for fast RPC reads)
           const ownedIds = [];
-          const checkCap = Math.min(minted, 50);
+          const checkCap = Math.min(minted, 69);
           if (connectedAccount && checkCap > 0) {
             const ownerCalls = [];
             for (let t = 1; t <= checkCap; t++) {
-              ownerCalls.push(ethCall(ADDR.nft, SEL.ownerOf + padUint(t)).then(h => ({ t, owner: decodeAddr(h, 0) })).catch(() => null));
+              ownerCalls.push(ethCall(net.addr.nft, SEL.ownerOf + padUint(t)).then(h => ({ t, owner: decodeAddr(h, 0) })).catch(() => null));
             }
             const owners = await Promise.all(ownerCalls);
             owners.forEach(o => { if (o && o.owner === connectedAccount) ownedIds.push(o.t); });
             el.ownedSummary.textContent = ownedIds.length > 0
               ? 'You own: Token #' + ownedIds.join(', #')
-              : 'Connected wallet owns 0 FloorGuard tokens';
+              : 'Connected wallet owns 0 FloorGuard tokens on ' + net.label;
           } else {
-            el.ownedSummary.textContent = minted + ' token' + (minted === 1 ? '' : 's') + ' minted on Sepolia';
+            el.ownedSummary.textContent = minted + ' token' + (minted === 1 ? '' : 's') + ' minted on ' + net.label;
           }
 
-          // Load active listings
           const nowSec = BigInt(Math.floor(Date.now() / 1000));
           const activeListings = [];
           const scanStart = Math.max(1, nextListingId - 30);
           for (let id = nextListingId - 1; id >= scanStart; id--) {
-            const hex = await ethCall(ADDR.market, SEL.listings + padUint(id));
+            const hex = await ethCall(net.addr.market, SEL.listings + padUint(id));
             const active = decodeWord(hex, 7) !== 0n;
             if (!active) continue;
             const seller = decodeAddr(hex, 0);
@@ -2304,7 +2412,7 @@
             const nonce = decodeWord(hex, 6);
             if (expiry <= nowSec) continue;
             const [curNonceHex, curOwnerHex] = await Promise.all([
-              ethCall(ADDR.market, SEL.sellerNonce + padAddr(seller)),
+              ethCall(net.addr.market, SEL.sellerNonce + padAddr(seller)),
               ethCall(collection, SEL.ownerOf + padUint(tokenId))
             ]);
             if (decodeWord(curNonceHex, 0) !== nonce) continue;
@@ -2317,7 +2425,7 @@
             const empty = document.createElement('p');
             empty.style.color = 'var(--text-dim)';
             empty.style.fontSize = '0.9rem';
-            empty.textContent = 'No active listings right now on Sepolia. Token owners can create a floor-protected listing below.';
+            empty.textContent = 'No active listings right now on ' + net.label + '. Token owners can create a floor-protected listing below.';
             el.listingsContainer.appendChild(empty);
           } else {
             activeListings.forEach(l => {
@@ -2375,15 +2483,27 @@
           const errP = document.createElement('p');
           errP.style.color = '#f87171';
           errP.style.fontSize = '0.88rem';
-          errP.textContent = 'Could not read Sepolia state: ' + friendlyError(err);
+          errP.textContent = 'Could not read ' + net.label + ' state: ' + friendlyError(err);
           el.listingsContainer.appendChild(errP);
         } finally {
           el.refreshBtn.disabled = false;
         }
       }
 
+      if (el.netSelect) {
+        el.netSelect.addEventListener('change', () => {
+          const next = NETWORKS[el.netSelect.value] || NETWORKS.mainnet;
+          activeNet = next;
+          liveCollectionFloor = activeNet.defaultFloor;
+          el.listPrice.value = activeNet.defaultPriceInput;
+          el.listPrice.step = activeNet.priceStep;
+          updateWalletChrome();
+          refreshMarket();
+        });
+      }
+
       el.connectBtn.addEventListener('click', connectWallet);
-      el.switchBtn.addEventListener('click', switchToSepolia);
+      el.switchBtn.addEventListener('click', switchToActiveNet);
       el.refreshBtn.addEventListener('click', refreshMarket);
       el.listPrice.addEventListener('input', updateListHint);
       el.listBtn.addEventListener('click', handleList);
@@ -2402,6 +2522,7 @@
         });
       }
 
+      updateWalletChrome();
       refreshMarket();
     })();
   </script>
