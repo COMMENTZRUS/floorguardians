@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src 'none'; base-uri 'self'; form-action 'none'; object-src 'none';">
+  <meta name="referrer" content="no-referrer">
   <title>FloorGuard Protocol | Immutable Floor Protection for Ethereum NFTs</title>
   <meta name="description" content="FloorGuard enforces a permanent, non-decreasing price floor on Ethereum NFTs denominated in USDC through atomic native listings and Seaport 1.6 restricted zones.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -692,7 +694,7 @@
         <li><a href="#faq">FAQ</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="https://github.com/COMMENTZRUS/FloorGuard-Protocol" target="_blank" rel="noopener" class="btn btn-secondary">
+        <a href="https://github.com/COMMENTZRUS/FloorGuard-Protocol" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
           GitHub
         </a>
@@ -1029,7 +1031,7 @@
             <tr>
               <td><strong>Seaport 1.6 Restricted Zone</strong></td>
               <td>EIP-712 signed Seaport 1.6 orders with <code>orderType: FULL_RESTRICTED</code> and <code>zone: FloorGuardSeaportZone</code>, settled on canonical Seaport 1.6.</td>
-              <td><span class="status-pill valid">Supported</span> Seller listings in pinned USDC only (no WETH/ETH or buyer offers).</td>
+              <td><span class="status-pill valid">Supported</span> Supports both ask listings and buyer USDC bids in pinned USDC (no WETH/ETH; qualified payment recipients only).</td>
             </tr>
             <tr>
               <td><strong>OpenSea Website &amp; API</strong></td>
@@ -1060,7 +1062,7 @@
             <span class="contract-name">Step 2: OpenSea Studio Profile</span>
             <span class="contract-badge" style="background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border-color: rgba(99, 102, 241, 0.3);">Discovery</span>
           </div>
-          <p class="contract-role">Claim your collection page in OpenSea Studio using the admin wallet (<code>FLOORGARD_ADMIN</code>) for provenance and metadata display.</p>
+          <p class="contract-role">Claim your collection page in OpenSea Studio using the admin wallet (<code>FLOORGUARD_ADMIN</code>) for provenance and metadata display.</p>
           <ul class="contract-spec-list">
             <li>Import contract address in <code>opensea.io/studio</code></li>
             <li>Set collection branding, links, and direct market URL</li>
@@ -1109,12 +1111,12 @@
       <div class="code-container">
         <div class="code-header">
           <div class="code-tabs">
-            <button class="code-tab active" onclick="switchTab(this, 'tab-read')">1. Query Floor</button>
-            <button class="code-tab" onclick="switchTab(this, 'tab-list')">2. Direct Market List</button>
-            <button class="code-tab" onclick="switchTab(this, 'tab-buy')">3. Direct Market Buy</button>
-            <button class="code-tab" onclick="switchTab(this, 'tab-seaport')">4. Seaport 1.6 Order</button>
+            <button type="button" class="code-tab active" data-tab="tab-read">1. Query Floor</button>
+            <button type="button" class="code-tab" data-tab="tab-list">2. Direct Market List</button>
+            <button type="button" class="code-tab" data-tab="tab-buy">3. Direct Market Buy</button>
+            <button type="button" class="code-tab" data-tab="tab-seaport">4. Seaport 1.6 Order</button>
           </div>
-          <button class="copy-btn" onclick="copyCurrentCode()">Copy Snippet</button>
+          <button type="button" id="copyCodeBtn" class="copy-btn">Copy Snippet</button>
         </div>
 
         <!-- Tab 1: Query -->
@@ -1138,20 +1140,23 @@
 }</code></pre>
 
         <!-- Tab 2: List -->
-        <pre id="tab-list" class="code-body" style="display:none;"><code><span class="hl-cmt">// Approve the DirectMarket contract, then list at or above the floor</span>
+        <pre id="tab-list" class="code-body" style="display:none;"><code><span class="hl-cmt">// Approve FloorGuardDirectMarket, then list at or above the floor</span>
+<span class="hl-kw">import</span> { ethers } <span class="hl-kw">from</span> <span class="hl-str">"ethers"</span>;
+
 <span class="hl-kw">const</span> MARKET_ABI = [
   <span class="hl-str">"function list(address collection, uint256 tokenId, uint256 price, uint256 expiry) external returns (uint256 id)"</span>
 ];
 
 <span class="hl-kw">async function</span> <span class="hl-fn">createListing</span>(marketAddress, collectionAddress, tokenId, priceUsdc, daysValid) {
+  <span class="hl-kw">const</span> provider = <span class="hl-kw">new</span> ethers.BrowserProvider(window.ethereum);
   <span class="hl-kw">const</span> signer = <span class="hl-kw">await</span> provider.getSigner();
 
   <span class="hl-cmt">// 1. Approve NFT</span>
   <span class="hl-kw">const</span> nft = <span class="hl-kw">new</span> ethers.Contract(collectionAddress, [<span class="hl-str">"function approve(address to, uint256 id) external"</span>], signer);
-  <span class="hl-kw">await</span> (await nft.approve(marketAddress, tokenId)).wait();
+  <span class="hl-kw">await</span> (<span class="hl-kw">await</span> nft.approve(marketAddress, tokenId)).wait();
 
   <span class="hl-cmt">// 2. Submit listing (USDC has 6 decimals)</span>
-  <span class="hl-kw">const</span> priceBaseUnits = ethers.parseUnits(priceUsdc.toString(), <span class="hl-num">6</span>);
+  <span class="hl-kw">const</span> priceBaseUnits = ethers.parseUnits(String(priceUsdc), <span class="hl-num">6</span>);
   <span class="hl-kw">const</span> expiry = Math.floor(Date.now() / <span class="hl-num">1000</span>) + (daysValid * <span class="hl-num">86400</span>);
 
   <span class="hl-kw">const</span> market = <span class="hl-kw">new</span> ethers.Contract(marketAddress, MARKET_ABI, signer);
@@ -1161,64 +1166,87 @@
 }</code></pre>
 
         <!-- Tab 3: Buy -->
-        <pre id="tab-buy" class="code-body" style="display:none;"><code><span class="hl-cmt">// Approve USDC spending, then execute atomic purchase</span>
+        <pre id="tab-buy" class="code-body" style="display:none;"><code><span class="hl-cmt">// Approve pinned USDC spending, then execute atomic purchase</span>
+<span class="hl-kw">import</span> { ethers } <span class="hl-kw">from</span> <span class="hl-str">"ethers"</span>;
+
 <span class="hl-kw">async function</span> <span class="hl-fn">executePurchase</span>(marketAddress, usdcAddress, listingId, priceBaseUnits) {
+  <span class="hl-kw">const</span> provider = <span class="hl-kw">new</span> ethers.BrowserProvider(window.ethereum);
   <span class="hl-kw">const</span> signer = <span class="hl-kw">await</span> provider.getSigner();
 
   <span class="hl-cmt">// 1. Approve USDC</span>
   <span class="hl-kw">const</span> usdc = <span class="hl-kw">new</span> ethers.Contract(usdcAddress, [<span class="hl-str">"function approve(address spender, uint256 amount) external returns (bool)"</span>], signer);
-  <span class="hl-kw">await</span> (await usdc.approve(marketAddress, priceBaseUnits)).wait();
+  <span class="hl-kw">await</span> (<span class="hl-kw">await</span> usdc.approve(marketAddress, priceBaseUnits)).wait();
 
-  <span class="hl-cmt">// 2. Execute atomic buy</span>
+  <span class="hl-cmt">// 2. Execute atomic buy (USDC settles before NFT transfer)</span>
   <span class="hl-kw">const</span> market = <span class="hl-kw">new</span> ethers.Contract(marketAddress, [<span class="hl-str">"function buy(uint256 id) external"</span>], signer);
   <span class="hl-kw">const</span> tx = <span class="hl-kw">await</span> market.buy(listingId);
   <span class="hl-kw">await</span> tx.wait();
-  console.log(<span class="hl-str">"Purchase complete! NFT transferred and floor verified."</span>);
+  console.log(<span class="hl-str">"Purchase complete! USDC settled and NFT transferred."</span>);
 }</code></pre>
 
         <!-- Tab 4: Seaport -->
-        <pre id="tab-seaport" class="code-body" style="display:none;"><code><span class="hl-cmt">// Step 1: Approve OpenSea Conduit (0x1E0049783F008A0085193E00003D00cd54003c71)
-// Step 2: Build and sign a restricted Seaport 1.6 order for OpenSea</span>
+        <pre id="tab-seaport" class="code-body" style="display:none;"><code><span class="hl-cmt">// EIP-712 sign a canonical Seaport 1.6 FULL_RESTRICTED order targeting FloorGuardSeaportZone
+// For direct Seaport 1.6 settlement or custom orderbooks (NOT vanilla opensea.io web UI)</span>
 <span class="hl-kw">import</span> { ethers } <span class="hl-kw">from</span> <span class="hl-str">"ethers"</span>;
 
-<span class="hl-kw">const</span> OPENSEA_CONDUIT = <span class="hl-str">"0x1E0049783F008A0085193E00003D00cd54003c71"</span>;
+<span class="hl-kw">const</span> SEAPORT_1_6 = <span class="hl-str">"0x0000000000000068F116a894984e2DB1123eB395"</span>;
 <span class="hl-kw">const</span> OPENSEA_CONDUIT_KEY = <span class="hl-str">"0x0000007b02230091a7ed01230072f7006a004d60a8d4e71d599b8104250f0000"</span>;
 
-<span class="hl-kw">async function</span> <span class="hl-fn">createOpenSeaOrder</span>(signer, nftAddress, zoneAddress, usdcAddress, tokenId, priceUsdc) {
+<span class="hl-kw">const</span> SEAPORT_TYPES = {
+  OrderComponents: [
+    { name: <span class="hl-str">"offerer"</span>, type: <span class="hl-str">"address"</span> }, { name: <span class="hl-str">"zone"</span>, type: <span class="hl-str">"address"</span> },
+    { name: <span class="hl-str">"offer"</span>, type: <span class="hl-str">"OfferItem[]"</span> }, { name: <span class="hl-str">"consideration"</span>, type: <span class="hl-str">"ConsiderationItem[]"</span> },
+    { name: <span class="hl-str">"orderType"</span>, type: <span class="hl-str">"uint8"</span> }, { name: <span class="hl-str">"startTime"</span>, type: <span class="hl-str">"uint256"</span> },
+    { name: <span class="hl-str">"endTime"</span>, type: <span class="hl-str">"uint256"</span> }, { name: <span class="hl-str">"zoneHash"</span>, type: <span class="hl-str">"bytes32"</span> },
+    { name: <span class="hl-str">"salt"</span>, type: <span class="hl-str">"uint256"</span> }, { name: <span class="hl-str">"conduitKey"</span>, type: <span class="hl-str">"bytes32"</span> },
+    { name: <span class="hl-str">"counter"</span>, type: <span class="hl-str">"uint256"</span> }
+  ],
+  OfferItem: [
+    { name: <span class="hl-str">"itemType"</span>, type: <span class="hl-str">"uint8"</span> }, { name: <span class="hl-str">"token"</span>, type: <span class="hl-str">"address"</span> },
+    { name: <span class="hl-str">"identifierOrCriteria"</span>, type: <span class="hl-str">"uint256"</span> }, { name: <span class="hl-str">"startAmount"</span>, type: <span class="hl-str">"uint256"</span> },
+    { name: <span class="hl-str">"endAmount"</span>, type: <span class="hl-str">"uint256"</span> }
+  ],
+  ConsiderationItem: [
+    { name: <span class="hl-str">"itemType"</span>, type: <span class="hl-str">"uint8"</span> }, { name: <span class="hl-str">"token"</span>, type: <span class="hl-str">"address"</span> },
+    { name: <span class="hl-str">"identifierOrCriteria"</span>, type: <span class="hl-str">"uint256"</span> }, { name: <span class="hl-str">"startAmount"</span>, type: <span class="hl-str">"uint256"</span> },
+    { name: <span class="hl-str">"endAmount"</span>, type: <span class="hl-str">"uint256"</span> }, { name: <span class="hl-str">"recipient"</span>, type: <span class="hl-str">"address"</span> }
+  ]
+};
+
+<span class="hl-kw">async function</span> <span class="hl-fn">signSeaportOrder</span>(signer, coreAddress, nftAddress, zoneAddress, usdcAddress, tokenId, priceUsdc) {
   <span class="hl-kw">const</span> seller = <span class="hl-kw">await</span> signer.getAddress();
+  <span class="hl-kw">const</span> priceBaseUnits = ethers.parseUnits(String(priceUsdc), <span class="hl-num">6</span>);
 
-  <span class="hl-cmt">// 1. Approve OpenSea Conduit for the NFT</span>
-  <span class="hl-kw">const</span> nft = <span class="hl-kw">new</span> ethers.Contract(nftAddress, [<span class="hl-str">"function setApprovalForAll(address operator, bool approved) external"</span>], signer);
-  <span class="hl-kw">await</span> (await nft.setApprovalForAll(OPENSEA_CONDUIT, <span class="hl-kw">true</span>)).wait();
+  <span class="hl-cmt">// 1. Verify active effectiveFloor before signing</span>
+  <span class="hl-kw">const</span> core = <span class="hl-kw">new</span> ethers.Contract(coreAddress, [<span class="hl-str">"function effectiveFloor(address,uint256) view returns (uint256)"</span>], signer.provider);
+  <span class="hl-kw">if</span> (priceBaseUnits &lt; <span class="hl-kw">await</span> core.effectiveFloor(nftAddress, tokenId)) <span class="hl-kw">throw new</span> Error(<span class="hl-str">"Below floor"</span>);
 
-  <span class="hl-cmt">// 2. Build Seaport 1.6 Restricted Order (orderType: 2 = FULL_RESTRICTED)</span>
-  <span class="hl-kw">const</span> priceBaseUnits = ethers.parseUnits(priceUsdc.toString(), <span class="hl-num">6</span>);
-  <span class="hl-kw">const</span> orderParameters = {
+  <span class="hl-cmt">// 2. Query Seaport counter &amp; EIP-712 domain info</span>
+  <span class="hl-kw">const</span> seaport = <span class="hl-kw">new</span> ethers.Contract(SEAPORT_1_6, [
+    <span class="hl-str">"function getCounter(address) view returns (uint256)"</span>,
+    <span class="hl-str">"function information() view returns (string version, bytes32 domainSeparator, address)"</span>
+  ], signer.provider);
+  <span class="hl-kw">const</span> [counter, info, net] = <span class="hl-kw">await</span> Promise.all([seaport.getCounter(seller), seaport.information(), signer.provider.getNetwork()]);
+
+  <span class="hl-kw">const</span> now = Math.floor(Date.now() / <span class="hl-num">1000</span>);
+  <span class="hl-kw">const</span> orderComponents = {
     offerer: seller,
-    zone: zoneAddress,                   <span class="hl-cmt">// REQUIRED: FloorGuardSeaportZone</span>
-    orderType: <span class="hl-num">2</span>,                        <span class="hl-cmt">// FULL_RESTRICTED invokes zone hooks</span>
-    startTime: Math.floor(Date.now() / <span class="hl-num">1000</span>),
-    endTime: Math.floor(Date.now() / <span class="hl-num">1000</span>) + (<span class="hl-num">7</span> * <span class="hl-num">86400</span>),
-    conduitKey: OPENSEA_CONDUIT_KEY,     <span class="hl-cmt">// OpenSea Conduit Key</span>
-    offer: [{
-      itemType: <span class="hl-num">2</span>,                       <span class="hl-cmt">// ERC-721</span>
-      token: nftAddress,
-      identifierOrCriteria: tokenId,
-      startAmount: <span class="hl-num">1</span>,
-      endAmount: <span class="hl-num">1</span>
-    }],
-    consideration: [{
-      itemType: <span class="hl-num">1</span>,                       <span class="hl-cmt">// ERC-20</span>
-      token: usdcAddress,                <span class="hl-cmt">// Pinned Circle USDC only</span>
-      identifierOrCriteria: <span class="hl-num">0</span>,
-      startAmount: priceBaseUnits,
-      endAmount: priceBaseUnits,
-      recipient: seller
-    }]
+    zone: zoneAddress, <span class="hl-cmt">// REQUIRED: FloorGuardSeaportZone</span>
+    offer: [{ itemType: <span class="hl-num">2</span>, token: nftAddress, identifierOrCriteria: String(tokenId), startAmount: <span class="hl-str">"1"</span>, endAmount: <span class="hl-str">"1"</span> }],
+    consideration: [{ itemType: <span class="hl-num">1</span>, token: usdcAddress, identifierOrCriteria: <span class="hl-str">"0"</span>, startAmount: priceBaseUnits.toString(), endAmount: priceBaseUnits.toString(), recipient: seller }],
+    orderType: <span class="hl-num">2</span>, <span class="hl-cmt">// FULL_RESTRICTED</span>
+    startTime: String(now),
+    endTime: String(now + <span class="hl-num">7</span> * <span class="hl-num">86400</span>),
+    zoneHash: ethers.ZeroHash, <span class="hl-cmt">// REQUIRED: zero zoneHash</span>
+    salt: BigInt(ethers.hexlify(ethers.randomBytes(<span class="hl-num">32</span>))).toString(),
+    conduitKey: OPENSEA_CONDUIT_KEY,
+    counter: counter.toString()
   };
 
-  console.log(<span class="hl-str">"Restricted Seaport order ready for OpenSea fulfillment:"</span>, orderParameters);
-  <span class="hl-kw">return</span> orderParameters;
+  <span class="hl-kw">const</span> domain = { name: <span class="hl-str">"Seaport"</span>, version: info.version, chainId: Number(net.chainId), verifyingContract: SEAPORT_1_6 };
+  <span class="hl-kw">const</span> signature = <span class="hl-kw">await</span> signer.signTypedData(domain, SEAPORT_TYPES, orderComponents);
+  <span class="hl-kw">const</span> orderHash = ethers.TypedDataEncoder.hashStruct(<span class="hl-str">"OrderComponents"</span>, SEAPORT_TYPES, orderComponents);
+  <span class="hl-kw">return</span> { parameters: { ...orderComponents, totalOriginalConsiderationItems: <span class="hl-num">1</span> }, signature, orderHash };
 }</code></pre>
       </div>
     </section>
@@ -1387,15 +1415,15 @@
         </div>
       </div>
       <ul class="footer-links">
-        <li><a href="https://github.com/COMMENTZRUS/FloorGuard-Protocol" target="_blank" rel="noopener">Protocol Repository</a></li>
-        <li><a href="https://github.com/COMMENTZRUS/floorguardians" target="_blank" rel="noopener">Website Repository</a></li>
-        <li><a href="FLOORGUARD.txt" target="_blank">Plain Text Spec</a></li>
+        <li><a href="https://github.com/COMMENTZRUS/FloorGuard-Protocol" target="_blank" rel="noopener noreferrer">Protocol Repository</a></li>
+        <li><a href="https://github.com/COMMENTZRUS/floorguardians" target="_blank" rel="noopener noreferrer">Website Repository</a></li>
+        <li><a href="FLOORGUARD.txt" target="_blank" rel="noopener noreferrer">Plain Text Spec</a></li>
       </ul>
     </div>
   </footer>
 
   <script>
-    // Tab switching for code snippets
+    // Tab switching for code snippets (no inline onclick handlers)
     function switchTab(btn, tabId) {
       document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.code-body').forEach(b => b.style.display = 'none');
@@ -1404,17 +1432,42 @@
       if (target) target.style.display = 'block';
     }
 
-    // Copy active code snippet
+    document.querySelectorAll('.code-tab[data-tab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        switchTab(btn, btn.getAttribute('data-tab'));
+      });
+    });
+
+    // Copy active code snippet (race-safe label restoration + fallback)
+    const DEFAULT_COPY_LABEL = 'Copy Snippet';
+    const copyBtn = document.getElementById('copyCodeBtn');
+    let copyResetTimer = null;
+
+    function setCopyStatus(label) {
+      if (!copyBtn) return;
+      if (copyResetTimer) clearTimeout(copyResetTimer);
+      copyBtn.innerText = label;
+      copyResetTimer = setTimeout(() => {
+        copyBtn.innerText = DEFAULT_COPY_LABEL;
+        copyResetTimer = null;
+      }, 2000);
+    }
+
     function copyCurrentCode() {
       const activePre = document.querySelector('.code-body[style*="block"], .code-body:not([style*="none"])');
-      if (activePre) {
-        navigator.clipboard.writeText(activePre.innerText).then(() => {
-          const copyBtn = document.querySelector('.copy-btn');
-          const originalText = copyBtn.innerText;
-          copyBtn.innerText = 'Copied!';
-          setTimeout(() => copyBtn.innerText = originalText, 2000);
-        });
+      if (!activePre) return;
+      const text = activePre.innerText;
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+        navigator.clipboard.writeText(text)
+          .then(() => setCopyStatus('Copied!'))
+          .catch(() => setCopyStatus('Copy Failed'));
+      } else {
+        setCopyStatus('Clipboard Unavailable');
       }
+    }
+
+    if (copyBtn) {
+      copyBtn.addEventListener('click', copyCurrentCode);
     }
 
     // Interactive Calculator
@@ -1433,15 +1486,15 @@
 
     function updateCalc() {
       const floor = Math.max(parseFloat(calcFloorInput ? calcFloorInput.value : 100000) || 1, 1);
-      const supply = Math.max(parseInt(calcSupplyInput ? calcSupplyInput.value : 69) || 1, 1);
-      const price = parseFloat(calcPriceInput.value) || 0;
+      const supply = Math.max(parseInt(calcSupplyInput ? calcSupplyInput.value : 69, 10) || 1, 1);
+      const price = Math.max(parseFloat(calcPriceInput.value) || 0, 0);
       const royaltyPct = Math.min(Math.max(parseFloat(calcRoyaltyInput.value) || 0, 0), 10);
-      const feeBps = Math.min(Math.max(parseInt(calcFeeInput.value) || 0, 0), 1000);
+      const feeBps = Math.min(Math.max(parseInt(calcFeeInput.value, 10) || 0, 0), 1000);
 
       const royalty = (price * royaltyPct) / 100;
       const fee = (price * feeBps) / 10000;
       const proceeds = price - royalty - fee;
-      const totalValuation = price * supply;
+      const totalFloorValuation = floor * supply;
 
       if (calcFloorDisplay) {
         calcFloorDisplay.innerText = floor.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USDC';
@@ -1451,7 +1504,7 @@
       calcFeeAmt.innerText = fee.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USDC';
       calcSellerProceeds.innerText = proceeds.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USDC';
       if (calcMarketCap) {
-        calcMarketCap.innerText = totalValuation.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USDC';
+        calcMarketCap.innerText = totalFloorValuation.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USDC';
       }
 
       if (price >= floor) {
