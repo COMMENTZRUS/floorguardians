@@ -909,6 +909,9 @@
               <option value="mainnet" selected>Ethereum Mainnet (1)</option>
               <option value="sepolia">Sepolia Testnet (11155111)</option>
             </select>
+            <select id="tradeCollectionSelect" class="input-field" aria-label="Select Collection" style="width: auto; padding: 0.45rem 0.75rem; font-size: 0.84rem; font-family: var(--font-mono);">
+              <option value="fguard" selected>Floor Guardians (FGUARD)</option>
+            </select>
             <span id="tradeNetworkBadge" class="status-pill valid">Mainnet (1)</span>
             <button type="button" id="tradeRefreshBtn" class="btn btn-secondary">Refresh</button>
             <button type="button" id="tradeSwitchChainBtn" class="btn btn-secondary" style="display:none;">Switch Network</button>
@@ -1947,9 +1950,6 @@
           shortLabel: 'Mainnet (1)',
           chainIdHex: '0x1',
           explorer: 'https://etherscan.io',
-          defaultFloor: 100000000000n,
-          defaultPriceInput: '100000',
-          priceStep: '1000',
           rpcs: [
             'https://ethereum-rpc.publicnode.com',
             'https://eth.llamarpc.com'
@@ -1957,9 +1957,20 @@
           addr: {
             usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
             core: '0x05Cbf4513d56e47ba2872988a462F23394A4854f',
-            nft: '0xF972CB947CAC1Ba60cBA2E2e6C80e07de84d0033',
             market: '0x6910d2035d5dF8ED0A830fE48AE0baBF632ffe5d'
-          }
+          },
+          collections: [
+            {
+              key: 'fguard',
+              name: 'Floor Guardians (FGUARD)',
+              symbol: 'FGUARD',
+              addr: '0xF972CB947CAC1Ba60cBA2E2e6C80e07de84d0033',
+              defaultFloor: 100000000000n,
+              defaultPriceInput: '100000',
+              priceStep: '1000',
+              imagePrefix: null
+            }
+          ]
         },
         sepolia: {
           key: 'sepolia',
@@ -1967,9 +1978,6 @@
           shortLabel: 'Sepolia (11155111)',
           chainIdHex: '0xaa36a7',
           explorer: 'https://sepolia.etherscan.io',
-          defaultFloor: 5000000n,
-          defaultPriceInput: '5',
-          priceStep: '0.5',
           rpcs: [
             'https://ethereum-sepolia-rpc.publicnode.com',
             'https://rpc.sepolia.org'
@@ -1977,9 +1985,30 @@
           addr: {
             usdc: '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238',
             core: '0xD58AeAD993873c1C99e82278aE12dA874a008F67',
-            nft: '0x0eFDfD927Cc5D1B3310dD75d64a7B475eC016413',
             market: '0x1D3f9D9018E1884F948F2BEa3434C7d6B950EaF6'
-          }
+          },
+          collections: [
+            {
+              key: 'og69',
+              name: 'Original Sixty Nine (OG69)',
+              symbol: 'OG69',
+              addr: '0xdA2D6A3dB0A09692F74246eB84699e4802DB0C78',
+              defaultFloor: 5000000n,
+              defaultPriceInput: '5',
+              priceStep: '0.5',
+              imagePrefix: 'og69-sepolia/images/'
+            },
+            {
+              key: 'fguard',
+              name: 'FloorGuard Sepolia (FGUARD)',
+              symbol: 'FGUARD',
+              addr: '0x0eFDfD927Cc5D1B3310dD75d64a7B475eC016413',
+              defaultFloor: 5000000n,
+              defaultPriceInput: '5',
+              priceStep: '0.5',
+              imagePrefix: null
+            }
+          ]
         }
       };
 
@@ -2007,6 +2036,7 @@
 
       const el = {
         netSelect: document.getElementById('tradeNetSelect'),
+        colSelect: document.getElementById('tradeCollectionSelect'),
         heading: document.getElementById('tradeHeading'),
         userUsdcLabel: document.getElementById('tradeUserUsdcLabel'),
         listPriceLabel: document.getElementById('tradeListPriceLabel'),
@@ -2035,10 +2065,23 @@
       if (!el.connectBtn) return;
 
       let activeNet = NETWORKS.mainnet;
+      let activeCol = activeNet.collections[0];
       let connectedAccount = null;
       let currentChainId = null;
-      let liveCollectionFloor = activeNet.defaultFloor;
+      let liveCollectionFloor = activeCol.defaultFloor;
       let rpcReqId = 1;
+
+      function syncCollectionOptions() {
+        if (!el.colSelect) return;
+        while (el.colSelect.firstChild) el.colSelect.removeChild(el.colSelect.firstChild);
+        activeNet.collections.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.key;
+          opt.textContent = c.name;
+          if (c.key === activeCol.key) opt.selected = true;
+          el.colSelect.appendChild(opt);
+        });
+      }
 
       function padUint(val) {
         return BigInt(val).toString(16).padStart(64, '0');
@@ -2189,7 +2232,7 @@
       }
 
       function updateWalletChrome() {
-        if (el.heading) el.heading.textContent = 'FloorGuard Direct Market (' + activeNet.label + ')';
+        if (el.heading) el.heading.textContent = activeCol.name + ' — Direct Market (' + activeNet.label + ')';
         if (el.userUsdcLabel) el.userUsdcLabel.textContent = 'Your ' + (activeNet.key === 'mainnet' ? 'Mainnet' : 'Sepolia') + ' USDC';
         if (el.listPriceLabel) el.listPriceLabel.textContent = 'Listing Price (' + (activeNet.key === 'mainnet' ? 'Mainnet' : 'Sepolia') + ' USDC)';
         if (connectedAccount) {
@@ -2297,23 +2340,23 @@
             setStatus('Enter a valid duration in days (>= 1).', 'error');
             return;
           }
-          const ownerHex = await ethCall(activeNet.addr.nft, SEL.ownerOf + padUint(tokenId));
+          const ownerHex = await ethCall(activeCol.addr, SEL.ownerOf + padUint(tokenId));
           const owner = decodeAddr(ownerHex, 0);
           if (owner !== connectedAccount) {
-            setStatus('Connected wallet does not own Token #' + tokenId + ' (owner: ' + shortAddr(owner) + ').', 'error');
+            setStatus('Connected wallet does not own ' + activeCol.symbol + ' #' + tokenId + ' (owner: ' + shortAddr(owner) + ').', 'error');
             return;
           }
-          const approvedHex = await ethCall(activeNet.addr.nft, SEL.isApprovedForAll + padAddr(connectedAccount) + padAddr(activeNet.addr.market));
+          const approvedHex = await ethCall(activeCol.addr, SEL.isApprovedForAll + padAddr(connectedAccount) + padAddr(activeNet.addr.market));
           if (decodeWord(approvedHex, 0) === 0n) {
-            await sendTx(activeNet.addr.nft, SEL.setApprovalForAll + padAddr(activeNet.addr.market) + padBool(true), 'Approving FloorGuardDirectMarket for NFTs');
+            await sendTx(activeCol.addr, SEL.setApprovalForAll + padAddr(activeNet.addr.market) + padBool(true), 'Approving FloorGuardDirectMarket for ' + activeCol.symbol);
           }
           const expiry = BigInt(Math.floor(Date.now() / 1000) + days * 86400);
           const listHash = await sendTx(
             activeNet.addr.market,
-            SEL.list + padAddr(activeNet.addr.nft) + padUint(tokenId) + padUint(price) + padUint(expiry),
-            'Creating Listing for Token #' + tokenId + ' at ' + formatUsdc(price)
+            SEL.list + padAddr(activeCol.addr) + padUint(tokenId) + padUint(price) + padUint(expiry),
+            'Creating Listing for ' + activeCol.symbol + ' #' + tokenId + ' at ' + formatUsdc(price)
           );
-          setStatus('Listing created for Token #' + tokenId + ' at ' + formatUsdc(price) + '!', 'success', listHash);
+          setStatus('Listing created for ' + activeCol.symbol + ' #' + tokenId + ' at ' + formatUsdc(price) + '!', 'success', listHash);
           await refreshMarket();
         } catch (err) {
           setStatus(friendlyError(err), 'error');
@@ -2333,18 +2376,18 @@
             setStatus('Enter a valid non-zero Ethereum recipient address (0x...).', 'error');
             return;
           }
-          const ownerHex = await ethCall(activeNet.addr.nft, SEL.ownerOf + padUint(tokenId));
+          const ownerHex = await ethCall(activeCol.addr, SEL.ownerOf + padUint(tokenId));
           const owner = decodeAddr(ownerHex, 0);
           if (owner !== connectedAccount) {
-            setStatus('Only the current owner (' + shortAddr(owner) + ') can gift Token #' + tokenId + '.', 'error');
+            setStatus('Only the current owner (' + shortAddr(owner) + ') can gift ' + activeCol.symbol + ' #' + tokenId + '.', 'error');
             return;
           }
           const giftHash = await sendTx(
-            activeNet.addr.nft,
+            activeCol.addr,
             SEL.transferFrom + padAddr(connectedAccount) + padAddr(recipient) + padUint(tokenId),
-            'Sending 0-USDC Gift of Token #' + tokenId + ' to ' + shortAddr(recipient)
+            'Sending 0-USDC Gift of ' + activeCol.symbol + ' #' + tokenId + ' to ' + shortAddr(recipient)
           );
-          setStatus('Gift complete! Token #' + tokenId + ' transferred to ' + shortAddr(recipient) + ' with 0 USDC.', 'success', giftHash);
+          setStatus('Gift complete! ' + activeCol.symbol + ' #' + tokenId + ' transferred to ' + shortAddr(recipient) + ' with 0 USDC.', 'success', giftHash);
           await refreshMarket();
         } catch (err) {
           setStatus(friendlyError(err), 'error');
@@ -2354,15 +2397,16 @@
       async function refreshMarket() {
         el.refreshBtn.disabled = true;
         const net = activeNet;
+        const col = activeCol;
         try {
           const [floorHex, mintedHex, maxSupplyHex, pausedHex, nextIdHex] = await Promise.all([
-            ethCall(net.addr.core, SEL.collectionFloor + padAddr(net.addr.nft)),
-            ethCall(net.addr.nft, SEL.minted),
-            ethCall(net.addr.nft, SEL.maxSupply),
+            ethCall(net.addr.core, SEL.collectionFloor + padAddr(col.addr)),
+            ethCall(col.addr, SEL.minted),
+            ethCall(col.addr, SEL.maxSupply),
             ethCall(net.addr.market, SEL.paused),
             ethCall(net.addr.market, SEL.nextListingId)
           ]);
-          if (net !== activeNet) return;
+          if (net !== activeNet || col !== activeCol) return;
 
           liveCollectionFloor = decodeWord(floorHex, 0);
           const minted = Number(decodeWord(mintedHex, 0));
@@ -2386,19 +2430,20 @@
           if (connectedAccount && checkCap > 0) {
             const ownerCalls = [];
             for (let t = 1; t <= checkCap; t++) {
-              ownerCalls.push(ethCall(net.addr.nft, SEL.ownerOf + padUint(t)).then(h => ({ t, owner: decodeAddr(h, 0) })).catch(() => null));
+              ownerCalls.push(ethCall(col.addr, SEL.ownerOf + padUint(t)).then(h => ({ t, owner: decodeAddr(h, 0) })).catch(() => null));
             }
             const owners = await Promise.all(ownerCalls);
             owners.forEach(o => { if (o && o.owner === connectedAccount) ownedIds.push(o.t); });
             el.ownedSummary.textContent = ownedIds.length > 0
-              ? 'You own: Token #' + ownedIds.join(', #')
-              : 'Connected wallet owns 0 FloorGuard tokens on ' + net.label;
+              ? 'You own ' + col.symbol + ': #' + ownedIds.join(', #')
+              : 'Connected wallet owns 0 ' + col.symbol + ' tokens on ' + net.label;
           } else {
-            el.ownedSummary.textContent = minted + ' token' + (minted === 1 ? '' : 's') + ' minted on ' + net.label;
+            el.ownedSummary.textContent = minted + ' ' + col.symbol + ' token' + (minted === 1 ? '' : 's') + ' minted on ' + net.label;
           }
 
           const nowSec = BigInt(Math.floor(Date.now() / 1000));
           const activeListings = [];
+          const targetColLower = col.addr.toLowerCase();
           const scanStart = Math.max(1, nextListingId - 30);
           for (let id = nextListingId - 1; id >= scanStart; id--) {
             const hex = await ethCall(net.addr.market, SEL.listings + padUint(id));
@@ -2406,6 +2451,7 @@
             if (!active) continue;
             const seller = decodeAddr(hex, 0);
             const collection = decodeAddr(hex, 1);
+            if (collection !== targetColLower) continue;
             const tokenId = Number(decodeWord(hex, 2));
             const price = decodeWord(hex, 3);
             const expiry = decodeWord(hex, 5);
@@ -2425,7 +2471,7 @@
             const empty = document.createElement('p');
             empty.style.color = 'var(--text-dim)';
             empty.style.fontSize = '0.9rem';
-            empty.textContent = 'No active listings right now on ' + net.label + '. Token owners can create a floor-protected listing below.';
+            empty.textContent = 'No active ' + col.symbol + ' listings right now on ' + net.label + '. Token owners can create a floor-protected listing below.';
             el.listingsContainer.appendChild(empty);
           } else {
             activeListings.forEach(l => {
@@ -2435,9 +2481,21 @@
               const meta = document.createElement('div');
               meta.className = 'listing-meta';
 
+              if (col.imagePrefix) {
+                const thumb = document.createElement('img');
+                thumb.src = col.imagePrefix + l.tokenId + '.jpg';
+                thumb.alt = col.symbol + ' #' + l.tokenId;
+                thumb.width = 44;
+                thumb.height = 44;
+                thumb.style.borderRadius = '8px';
+                thumb.style.border = '1px solid var(--border)';
+                thumb.style.objectFit = 'cover';
+                meta.appendChild(thumb);
+              }
+
               const badge = document.createElement('span');
               badge.className = 'listing-token-badge';
-              badge.textContent = 'Token #' + l.tokenId;
+              badge.textContent = col.symbol + ' #' + l.tokenId;
               meta.appendChild(badge);
 
               const priceEl = document.createElement('strong');
@@ -2494,13 +2552,29 @@
         el.netSelect.addEventListener('change', () => {
           const next = NETWORKS[el.netSelect.value] || NETWORKS.mainnet;
           activeNet = next;
-          liveCollectionFloor = activeNet.defaultFloor;
-          el.listPrice.value = activeNet.defaultPriceInput;
-          el.listPrice.step = activeNet.priceStep;
+          activeCol = activeNet.collections[0];
+          syncCollectionOptions();
+          liveCollectionFloor = activeCol.defaultFloor;
+          el.listPrice.value = activeCol.defaultPriceInput;
+          el.listPrice.step = activeCol.priceStep;
           updateWalletChrome();
           refreshMarket();
         });
       }
+
+      if (el.colSelect) {
+        el.colSelect.addEventListener('change', () => {
+          const found = activeNet.collections.find(c => c.key === el.colSelect.value);
+          activeCol = found || activeNet.collections[0];
+          liveCollectionFloor = activeCol.defaultFloor;
+          el.listPrice.value = activeCol.defaultPriceInput;
+          el.listPrice.step = activeCol.priceStep;
+          updateWalletChrome();
+          refreshMarket();
+        });
+      }
+
+      syncCollectionOptions();
 
       el.connectBtn.addEventListener('click', connectWallet);
       el.switchBtn.addEventListener('click', switchToActiveNet);
