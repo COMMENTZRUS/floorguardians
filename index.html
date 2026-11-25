@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src 'none'; base-uri 'self'; form-action 'none'; object-src 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src https://ethereum-sepolia-rpc.publicnode.com https://rpc.sepolia.org; base-uri 'self'; form-action 'none'; object-src 'none';">
   <meta name="referrer" content="no-referrer">
   <title>FloorGuard Protocol | Immutable Floor Protection for Ethereum NFTs</title>
   <meta name="description" content="FloorGuard enforces a permanent, non-decreasing price floor on Ethereum NFTs denominated in USDC through atomic native listings and Seaport 1.6 restricted zones.">
@@ -670,6 +670,145 @@
       color: var(--primary);
     }
 
+    /* Live Web3 Direct Market UI */
+    .market-panel {
+      background: linear-gradient(145deg, var(--bg-card) 0%, #0d1628 100%);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+    }
+    .market-topbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    .market-wallet-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+    }
+    .market-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .market-stat {
+      background: rgba(9, 13, 22, 0.65);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+    }
+    .market-stat-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+    .market-stat-value {
+      font-family: var(--font-mono);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 0.25rem;
+    }
+    .market-status-bar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding: 0.85rem 1.1rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border);
+      background: rgba(56, 189, 248, 0.08);
+      color: #e0f2fe;
+    }
+    .market-status-bar.visible { display: flex; }
+    .market-status-bar.success { background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.35); color: #a7f3d0; }
+    .market-status-bar.error { background: rgba(239, 68, 68, 0.12); border-color: rgba(239, 68, 68, 0.35); color: #fecaca; }
+    .market-listings-box {
+      background: rgba(9, 13, 22, 0.55);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .market-listings-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .listing-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(19, 30, 51, 0.65);
+      margin-bottom: 0.65rem;
+    }
+    .listing-row:last-child { margin-bottom: 0; }
+    .listing-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      align-items: center;
+      font-size: 0.88rem;
+    }
+    .listing-token-badge {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--primary);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+    }
+    .market-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.25rem;
+    }
+    .market-action-card {
+      background: rgba(9, 13, 22, 0.55);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .market-action-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .market-action-card p {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
     @media (max-width: 840px) {
       .nav-links { display: none; }
       .hero-title { font-size: 2.2rem; }
@@ -686,6 +825,7 @@
         <span>FloorGuard</span>
       </a>
       <ul class="nav-links">
+        <li><a href="#trade">Trade (Sepolia)</a></li>
         <li><a href="#how-it-works">How It Works</a></li>
         <li><a href="#contracts">Contracts</a></li>
         <li><a href="#integration">API & SDK</a></li>
@@ -698,7 +838,7 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
           GitHub
         </a>
-        <a href="#simulator" class="btn btn-primary">Try Simulator</a>
+        <a href="#trade" class="btn btn-primary">Live Sepolia Market</a>
       </div>
     </div>
   </header>
@@ -752,6 +892,99 @@
         <div class="metric-sub">Mandatory timelock queue on admin changes</div>
       </div>
     </div>
+
+    <!-- Live Web3 Direct Market (Sepolia Testnet) -->
+    <section id="trade">
+      <div class="market-panel">
+        <div class="market-topbar">
+          <div>
+            <div class="section-tag">Live On-Chain Testnet Market</div>
+            <h2 style="font-size: 1.55rem; font-weight: 800; color: #fff; margin-top: 0.25rem;">FloorGuard Direct Market (Sepolia)</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">
+              Interact directly with the verified Sepolia contracts using MetaMask, Rabby, or any EIP-1193 wallet. Zero protocol fee, zero escrow custody.
+            </p>
+          </div>
+          <div class="market-wallet-actions">
+            <span id="tradeNetworkBadge" class="status-pill valid">Sepolia (11155111)</span>
+            <button type="button" id="tradeRefreshBtn" class="btn btn-secondary">Refresh</button>
+            <button type="button" id="tradeSwitchChainBtn" class="btn btn-secondary" style="display:none;">Switch to Sepolia</button>
+            <button type="button" id="tradeConnectBtn" class="btn btn-primary">Connect Wallet</button>
+          </div>
+        </div>
+
+        <div class="market-stats">
+          <div class="market-stat">
+            <div class="market-stat-label">Live On-Chain Floor</div>
+            <div id="tradeLiveFloor" class="market-stat-value">Loading...</div>
+          </div>
+          <div class="market-stat">
+            <div class="market-stat-label">Minted / Max Supply</div>
+            <div id="tradeLiveSupply" class="market-stat-value">Loading...</div>
+          </div>
+          <div class="market-stat">
+            <div class="market-stat-label">Market Status</div>
+            <div id="tradeLivePaused" class="market-stat-value">Loading...</div>
+          </div>
+          <div class="market-stat">
+            <div class="market-stat-label">Your Sepolia USDC</div>
+            <div id="tradeUserUsdc" class="market-stat-value">Connect wallet</div>
+          </div>
+        </div>
+
+        <div id="tradeStatusBar" class="market-status-bar" role="status" aria-live="polite">
+          <span id="tradeStatusText"></span>
+          <a id="tradeStatusLink" href="#" target="_blank" rel="noopener noreferrer" style="color: var(--primary); font-family: var(--font-mono); font-size: 0.82rem; display:none;">View on Etherscan</a>
+        </div>
+
+        <div class="market-listings-box">
+          <div class="market-listings-header">
+            <h3 style="font-size: 1.05rem; font-weight: 700; color: #fff;">Active Direct Market Listings</h3>
+            <span id="tradeOwnedSummary" style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">Reading live Sepolia state...</span>
+          </div>
+          <div id="tradeListingsContainer">
+            <p style="color: var(--text-dim); font-size: 0.9rem;">Loading live listings from Sepolia...</p>
+          </div>
+        </div>
+
+        <div class="market-actions-grid">
+          <div class="market-action-card">
+            <h3>Create Protected Listing</h3>
+            <p>Lists your FloorGuard NFT in Circle Sepolia USDC. The 4-argument <code>list()</code> call locks your current net seller proceeds against royalty/fee front-running.</p>
+            <div class="input-group" style="margin-bottom: 0.35rem;">
+              <label class="input-label" for="tradeListTokenId">Token ID</label>
+              <input type="number" id="tradeListTokenId" class="input-field" value="1" min="1" step="1">
+            </div>
+            <div class="input-group" style="margin-bottom: 0.35rem;">
+              <label class="input-label" for="tradeListPrice">Listing Price (Sepolia USDC)</label>
+              <input type="number" id="tradeListPrice" class="input-field" value="5" min="0" step="0.5">
+            </div>
+            <div class="input-group" style="margin-bottom: 0.35rem;">
+              <label class="input-label" for="tradeListDays">Listing Duration (Days)</label>
+              <input type="number" id="tradeListDays" class="input-field" value="7" min="1" max="365" step="1">
+            </div>
+            <div id="tradeListHint" style="font-size: 0.82rem; font-family: var(--font-mono); color: var(--text-muted);"></div>
+            <button type="button" id="tradeListBtn" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: auto;">Approve NFT &amp; Create Listing</button>
+          </div>
+
+          <div class="market-action-card">
+            <h3>Owner Gift / Inheritance Transfer (0 USDC)</h3>
+            <p>Direct wallet-to-wallet transfers initiated by the current token owner bypass marketplace payment checks and execute with 0 USDC.</p>
+            <div class="input-group" style="margin-bottom: 0.35rem;">
+              <label class="input-label" for="tradeGiftTokenId">Token ID</label>
+              <input type="number" id="tradeGiftTokenId" class="input-field" value="1" min="1" step="1">
+            </div>
+            <div class="input-group" style="margin-bottom: 0.35rem;">
+              <label class="input-label" for="tradeGiftTo">Recipient Address (0x...)</label>
+              <input type="text" id="tradeGiftTo" class="input-field" placeholder="0x0000000000000000000000000000000000000000" autocomplete="off" spellcheck="false">
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-dim); line-height: 1.5;">
+              Only the current NFT owner can send a gift. Need test tokens? Claim free Circle Sepolia USDC at <a href="https://faucet.circle.com/" target="_blank" rel="noopener noreferrer" style="color: var(--primary);">faucet.circle.com</a>.
+            </div>
+            <button type="button" id="tradeGiftBtn" class="btn btn-secondary" style="width: 100%; justify-content: center; margin-top: auto;">Send 0-USDC Gift Transfer</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Interactive Price & Fee Simulator -->
     <section id="simulator">
@@ -1633,6 +1866,542 @@
         item.classList.toggle('open');
       });
     });
+
+    // =========================================================================
+    // Live Web3 Direct Market UI (Sepolia Testnet — Zero-Dependency EIP-1193)
+    // =========================================================================
+    (() => {
+      const SEPOLIA_CHAIN_ID_HEX = '0xaa36a7'; // 11155111
+      const RPC_URLS = [
+        'https://ethereum-sepolia-rpc.publicnode.com',
+        'https://rpc.sepolia.org'
+      ];
+      const ADDR = {
+        usdc: '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238',
+        core: '0xD58AeAD993873c1C99e82278aE12dA874a008F67',
+        nft: '0x0eFDfD927Cc5D1B3310dD75d64a7B475eC016413',
+        market: '0x1D3f9D9018E1884F948F2BEa3434C7d6B950EaF6'
+      };
+      // Verified 4-byte selectors (cast sig)
+      const SEL = {
+        collectionFloor: '0x92401d82',
+        effectiveFloor: '0x020e2dbf',
+        minted: '0x4f02c420',
+        maxSupply: '0xd5abeb01',
+        ownerOf: '0x6352211e',
+        isApprovedForAll: '0xe985e9c5',
+        balanceOf: '0x70a08231',
+        allowance: '0xdd62ed3e',
+        nextListingId: '0xaaccf1ec',
+        listings: '0xde74e57b',
+        sellerNonce: '0x5022e6ea',
+        paused: '0x5c975abb',
+        setApprovalForAll: '0xa22cb465',
+        list: '0xbb74a1c2',
+        cancel: '0x40e58ee5',
+        approve: '0x095ea7b3',
+        buy: '0xd96a094a',
+        transferFrom: '0x23b872dd'
+      };
+
+      const el = {
+        connectBtn: document.getElementById('tradeConnectBtn'),
+        switchBtn: document.getElementById('tradeSwitchChainBtn'),
+        refreshBtn: document.getElementById('tradeRefreshBtn'),
+        networkBadge: document.getElementById('tradeNetworkBadge'),
+        liveFloor: document.getElementById('tradeLiveFloor'),
+        liveSupply: document.getElementById('tradeLiveSupply'),
+        livePaused: document.getElementById('tradeLivePaused'),
+        userUsdc: document.getElementById('tradeUserUsdc'),
+        statusBar: document.getElementById('tradeStatusBar'),
+        statusText: document.getElementById('tradeStatusText'),
+        statusLink: document.getElementById('tradeStatusLink'),
+        ownedSummary: document.getElementById('tradeOwnedSummary'),
+        listingsContainer: document.getElementById('tradeListingsContainer'),
+        listTokenId: document.getElementById('tradeListTokenId'),
+        listPrice: document.getElementById('tradeListPrice'),
+        listDays: document.getElementById('tradeListDays'),
+        listHint: document.getElementById('tradeListHint'),
+        listBtn: document.getElementById('tradeListBtn'),
+        giftTokenId: document.getElementById('tradeGiftTokenId'),
+        giftTo: document.getElementById('tradeGiftTo'),
+        giftBtn: document.getElementById('tradeGiftBtn')
+      };
+      if (!el.connectBtn) return;
+
+      let connectedAccount = null;
+      let currentChainId = null;
+      let liveCollectionFloor = 5000000n;
+      let rpcReqId = 1;
+
+      function padUint(val) {
+        return BigInt(val).toString(16).padStart(64, '0');
+      }
+      function padAddr(addr) {
+        return addr.toLowerCase().replace(/^0x/, '').padStart(64, '0');
+      }
+      function padBool(flag) {
+        return padUint(flag ? 1n : 0n);
+      }
+      function decodeWord(hex, idx) {
+        const clean = (hex || '0x').replace(/^0x/, '');
+        const slice = clean.slice(idx * 64, (idx + 1) * 64);
+        return slice.length === 64 ? BigInt('0x' + slice) : 0n;
+      }
+      function decodeAddr(hex, idx) {
+        const clean = (hex || '0x').replace(/^0x/, '');
+        const slice = clean.slice(idx * 64 + 24, (idx + 1) * 64);
+        return slice.length === 40 ? '0x' + slice.toLowerCase() : '0x0000000000000000000000000000000000000000';
+      }
+      function shortAddr(addr) {
+        if (!addr || addr.length < 10) return addr || '';
+        return addr.slice(0, 6) + '...' + addr.slice(-4);
+      }
+      function isValidAddr(addr) {
+        return /^0x[0-9a-fA-F]{40}$/.test(addr || '') && addr.toLowerCase() !== '0x0000000000000000000000000000000000000000';
+      }
+      function parseUsdc(rawStr) {
+        const s = String(rawStr || '').trim();
+        if (!/^\d+(\.\d{0,6})?$/.test(s)) return null;
+        const parts = s.split('.');
+        const whole = BigInt(parts[0] || '0');
+        const frac = (parts[1] || '').padEnd(6, '0').slice(0, 6);
+        return whole * 1000000n + BigInt(frac);
+      }
+      function formatUsdc(baseUnits) {
+        const v = BigInt(baseUnits);
+        const whole = v / 1000000n;
+        const frac = (v % 1000000n).toString().padStart(6, '0').replace(/0+$/, '');
+        const wholeStr = whole.toLocaleString('en-US');
+        return wholeStr + '.' + (frac.length >= 2 ? frac : frac.padEnd(2, '0')) + ' USDC';
+      }
+
+      function setStatus(message, type, txHash) {
+        el.statusBar.className = 'market-status-bar visible' + (type ? ' ' + type : '');
+        el.statusText.textContent = message;
+        if (txHash && /^0x[0-9a-fA-F]{64}$/.test(txHash)) {
+          el.statusLink.href = 'https://sepolia.etherscan.io/tx/' + txHash;
+          el.statusLink.textContent = 'View tx ' + txHash.slice(0, 10) + '... on Etherscan';
+          el.statusLink.style.display = 'inline';
+        } else {
+          el.statusLink.style.display = 'none';
+        }
+      }
+
+      function friendlyError(err) {
+        const msg = (err && (err.data && err.data.message || err.shortMessage || err.message)) || String(err);
+        const rawData = (err && (err.data && typeof err.data === 'string' ? err.data : err.data && err.data.data)) || '';
+        if (rawData.startsWith('0xdc6ef75d') || msg.includes('BelowFloor')) return 'Reverted: BelowFloor — listing price is below the immutable on-chain USDC floor.';
+        if (err && err.code === 4001) return 'Transaction rejected in wallet.';
+        if (msg.includes('NotTokenOwner')) return 'Reverted: Only the current NFT owner can perform this action.';
+        if (msg.includes('EnforcedPause')) return 'Reverted: DirectMarket is currently paused by Guardian.';
+        if (msg.includes('SelfPurchase')) return 'Reverted: Sellers cannot buy their own listing.';
+        if (msg.includes('TransferNotPermitted')) return 'Reverted: TransferNotPermitted by FloorGuardTransferValidator.';
+        return msg.length > 180 ? msg.slice(0, 180) + '...' : msg;
+      }
+
+      async function rpcCall(method, params) {
+        let lastErr = null;
+        for (const url of RPC_URLS) {
+          try {
+            const res = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ jsonrpc: '2.0', id: rpcReqId++, method, params })
+            });
+            if (!res.ok) throw new Error('RPC HTTP ' + res.status);
+            const json = await res.json();
+            if (json.error) throw new Error(json.error.message || 'RPC error');
+            return json.result;
+          } catch (e) {
+            lastErr = e;
+          }
+        }
+        throw lastErr || new Error('Unable to reach Sepolia RPC');
+      }
+
+      async function ethCall(to, data) {
+        return rpcCall('eth_call', [{ to, data }, 'latest']);
+      }
+
+      async function waitForReceipt(txHash) {
+        for (let i = 0; i < 45; i++) {
+          await new Promise(r => setTimeout(r, 2500));
+          const receipt = await rpcCall('eth_getTransactionReceipt', [txHash]);
+          if (receipt) {
+            if (receipt.status === '0x0') throw new Error('Transaction reverted on-chain.');
+            return receipt;
+          }
+        }
+        return null;
+      }
+
+      function updateListHint() {
+        const parsed = parseUsdc(el.listPrice.value);
+        if (parsed === null) {
+          el.listHint.textContent = 'Enter a valid USDC amount (up to 6 decimals).';
+          el.listHint.style.color = '#f87171';
+        } else if (parsed < liveCollectionFloor) {
+          el.listHint.textContent = 'Below ' + formatUsdc(liveCollectionFloor) + ' floor — contract will revert with BelowFloor';
+          el.listHint.style.color = '#f87171';
+        } else {
+          el.listHint.textContent = 'Clears ' + formatUsdc(liveCollectionFloor) + ' floor — ready to list';
+          el.listHint.style.color = '#34d399';
+        }
+      }
+
+      async function ensureSepoliaWallet() {
+        if (!window.ethereum) {
+          setStatus('No browser wallet detected. Install MetaMask or Rabby to transact on Sepolia.', 'error');
+          return false;
+        }
+        if (!connectedAccount) {
+          await connectWallet();
+          if (!connectedAccount) return false;
+        }
+        currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+        if (currentChainId.toLowerCase() !== SEPOLIA_CHAIN_ID_HEX) {
+          await switchToSepolia();
+          currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+          if (currentChainId.toLowerCase() !== SEPOLIA_CHAIN_ID_HEX) {
+            setStatus('Please switch your wallet network to Ethereum Sepolia (11155111).', 'error');
+            return false;
+          }
+        }
+        return true;
+      }
+
+      async function sendTx(to, data, label) {
+        setStatus(label + ' — confirm in wallet...', '');
+        const txHash = await window.ethereum.request({
+          method: 'eth_sendTransaction',
+          params: [{ from: connectedAccount, to, data }]
+        });
+        setStatus(label + ' submitted — waiting for Sepolia confirmation...', '', txHash);
+        await waitForReceipt(txHash);
+        return txHash;
+      }
+
+      function updateWalletChrome() {
+        if (connectedAccount) {
+          el.connectBtn.textContent = shortAddr(connectedAccount);
+        } else {
+          el.connectBtn.textContent = 'Connect Wallet';
+          el.userUsdc.textContent = 'Connect wallet';
+        }
+        const wrongChain = connectedAccount && currentChainId && currentChainId.toLowerCase() !== SEPOLIA_CHAIN_ID_HEX;
+        el.switchBtn.style.display = wrongChain ? 'inline-flex' : 'none';
+        el.networkBadge.className = 'status-pill ' + (wrongChain ? 'invalid' : 'valid');
+        el.networkBadge.textContent = wrongChain ? 'Wrong Network' : 'Sepolia (11155111)';
+      }
+
+      async function connectWallet() {
+        if (!window.ethereum) {
+          setStatus('No EIP-1193 wallet found. Install MetaMask, Rabby, or Coinbase Wallet.', 'error');
+          return;
+        }
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          connectedAccount = accounts && accounts[0] ? accounts[0].toLowerCase() : null;
+          currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+          updateWalletChrome();
+          if (connectedAccount) {
+            setStatus('Connected ' + shortAddr(connectedAccount) + ' — loading balances & listings...', 'success');
+            await refreshMarket();
+          }
+        } catch (err) {
+          setStatus(friendlyError(err), 'error');
+        }
+      }
+
+      async function switchToSepolia() {
+        if (!window.ethereum) return;
+        try {
+          await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: SEPOLIA_CHAIN_ID_HEX }]
+          });
+          currentChainId = SEPOLIA_CHAIN_ID_HEX;
+          updateWalletChrome();
+        } catch (err) {
+          setStatus(friendlyError(err), 'error');
+        }
+      }
+
+      function clearNode(node) {
+        while (node.firstChild) node.removeChild(node.firstChild);
+      }
+
+      async function handleBuy(listing) {
+        try {
+          if (!(await ensureSepoliaWallet())) return;
+          if (connectedAccount === listing.seller) {
+            setStatus('You are the seller of this listing — use Cancel Listing instead.', 'error');
+            return;
+          }
+          const balHex = await ethCall(ADDR.usdc, SEL.balanceOf + padAddr(connectedAccount));
+          const bal = decodeWord(balHex, 0);
+          if (bal < listing.price) {
+            setStatus('Insufficient Circle Sepolia USDC (' + formatUsdc(bal) + ' available, need ' + formatUsdc(listing.price) + '). Claim free USDC at faucet.circle.com.', 'error');
+            return;
+          }
+          const allowHex = await ethCall(ADDR.usdc, SEL.allowance + padAddr(connectedAccount) + padAddr(ADDR.market));
+          const allowance = decodeWord(allowHex, 0);
+          if (allowance < listing.price) {
+            await sendTx(ADDR.usdc, SEL.approve + padAddr(ADDR.market) + padUint(listing.price), 'Approving ' + formatUsdc(listing.price));
+          }
+          const buyHash = await sendTx(ADDR.market, SEL.buy + padUint(listing.id), 'Buying Token #' + listing.tokenId + ' for ' + formatUsdc(listing.price));
+          setStatus('Purchase settled! Token #' + listing.tokenId + ' delivered for ' + formatUsdc(listing.price) + '.', 'success', buyHash);
+          await refreshMarket();
+        } catch (err) {
+          setStatus(friendlyError(err), 'error');
+        }
+      }
+
+      async function handleCancel(listingId) {
+        try {
+          if (!(await ensureSepoliaWallet())) return;
+          const hash = await sendTx(ADDR.market, SEL.cancel + padUint(listingId), 'Cancelling Listing #' + listingId);
+          setStatus('Listing #' + listingId + ' cancelled.', 'success', hash);
+          await refreshMarket();
+        } catch (err) {
+          setStatus(friendlyError(err), 'error');
+        }
+      }
+
+      async function handleList() {
+        try {
+          if (!(await ensureSepoliaWallet())) return;
+          const tokenId = parseInt(el.listTokenId.value, 10);
+          const days = parseInt(el.listDays.value, 10);
+          const price = parseUsdc(el.listPrice.value);
+          if (!Number.isInteger(tokenId) || tokenId < 1) {
+            setStatus('Enter a valid Token ID (>= 1).', 'error');
+            return;
+          }
+          if (price === null || price <= 0n) {
+            setStatus('Enter a valid positive USDC price.', 'error');
+            return;
+          }
+          if (!Number.isInteger(days) || days < 1) {
+            setStatus('Enter a valid duration in days (>= 1).', 'error');
+            return;
+          }
+          const ownerHex = await ethCall(ADDR.nft, SEL.ownerOf + padUint(tokenId));
+          const owner = decodeAddr(ownerHex, 0);
+          if (owner !== connectedAccount) {
+            setStatus('Connected wallet does not own Token #' + tokenId + ' (owner: ' + shortAddr(owner) + ').', 'error');
+            return;
+          }
+          const approvedHex = await ethCall(ADDR.nft, SEL.isApprovedForAll + padAddr(connectedAccount) + padAddr(ADDR.market));
+          if (decodeWord(approvedHex, 0) === 0n) {
+            await sendTx(ADDR.nft, SEL.setApprovalForAll + padAddr(ADDR.market) + padBool(true), 'Approving FloorGuardDirectMarket for NFTs');
+          }
+          const expiry = BigInt(Math.floor(Date.now() / 1000) + days * 86400);
+          const listHash = await sendTx(
+            ADDR.market,
+            SEL.list + padAddr(ADDR.nft) + padUint(tokenId) + padUint(price) + padUint(expiry),
+            'Creating Listing for Token #' + tokenId + ' at ' + formatUsdc(price)
+          );
+          setStatus('Listing created for Token #' + tokenId + ' at ' + formatUsdc(price) + '!', 'success', listHash);
+          await refreshMarket();
+        } catch (err) {
+          setStatus(friendlyError(err), 'error');
+        }
+      }
+
+      async function handleGift() {
+        try {
+          if (!(await ensureSepoliaWallet())) return;
+          const tokenId = parseInt(el.giftTokenId.value, 10);
+          const recipient = (el.giftTo.value || '').trim();
+          if (!Number.isInteger(tokenId) || tokenId < 1) {
+            setStatus('Enter a valid Token ID (>= 1).', 'error');
+            return;
+          }
+          if (!isValidAddr(recipient)) {
+            setStatus('Enter a valid non-zero Ethereum recipient address (0x...).', 'error');
+            return;
+          }
+          const ownerHex = await ethCall(ADDR.nft, SEL.ownerOf + padUint(tokenId));
+          const owner = decodeAddr(ownerHex, 0);
+          if (owner !== connectedAccount) {
+            setStatus('Only the current owner (' + shortAddr(owner) + ') can gift Token #' + tokenId + '.', 'error');
+            return;
+          }
+          const giftHash = await sendTx(
+            ADDR.nft,
+            SEL.transferFrom + padAddr(connectedAccount) + padAddr(recipient) + padUint(tokenId),
+            'Sending 0-USDC Gift of Token #' + tokenId + ' to ' + shortAddr(recipient)
+          );
+          setStatus('Gift complete! Token #' + tokenId + ' transferred to ' + shortAddr(recipient) + ' with 0 USDC.', 'success', giftHash);
+          await refreshMarket();
+        } catch (err) {
+          setStatus(friendlyError(err), 'error');
+        }
+      }
+
+      async function refreshMarket() {
+        el.refreshBtn.disabled = true;
+        try {
+          const [floorHex, mintedHex, maxSupplyHex, pausedHex, nextIdHex] = await Promise.all([
+            ethCall(ADDR.core, SEL.collectionFloor + padAddr(ADDR.nft)),
+            ethCall(ADDR.nft, SEL.minted),
+            ethCall(ADDR.nft, SEL.maxSupply),
+            ethCall(ADDR.market, SEL.paused),
+            ethCall(ADDR.market, SEL.nextListingId)
+          ]);
+
+          liveCollectionFloor = decodeWord(floorHex, 0);
+          const minted = Number(decodeWord(mintedHex, 0));
+          const maxSupply = Number(decodeWord(maxSupplyHex, 0));
+          const isPaused = decodeWord(pausedHex, 0) !== 0n;
+          const nextListingId = Number(decodeWord(nextIdHex, 0));
+
+          el.liveFloor.textContent = formatUsdc(liveCollectionFloor);
+          el.liveSupply.textContent = minted + ' / ' + (maxSupply === 0 ? 'Uncapped' : maxSupply);
+          el.livePaused.textContent = isPaused ? 'Paused (Guardian)' : 'Active';
+          el.livePaused.style.color = isPaused ? '#f87171' : '#34d399';
+          updateListHint();
+
+          if (connectedAccount) {
+            const usdcHex = await ethCall(ADDR.usdc, SEL.balanceOf + padAddr(connectedAccount));
+            el.userUsdc.textContent = formatUsdc(decodeWord(usdcHex, 0));
+          }
+
+          // Inspect owned tokens (capped to first 50 for fast RPC reads)
+          const ownedIds = [];
+          const checkCap = Math.min(minted, 50);
+          if (connectedAccount && checkCap > 0) {
+            const ownerCalls = [];
+            for (let t = 1; t <= checkCap; t++) {
+              ownerCalls.push(ethCall(ADDR.nft, SEL.ownerOf + padUint(t)).then(h => ({ t, owner: decodeAddr(h, 0) })).catch(() => null));
+            }
+            const owners = await Promise.all(ownerCalls);
+            owners.forEach(o => { if (o && o.owner === connectedAccount) ownedIds.push(o.t); });
+            el.ownedSummary.textContent = ownedIds.length > 0
+              ? 'You own: Token #' + ownedIds.join(', #')
+              : 'Connected wallet owns 0 FloorGuard tokens';
+          } else {
+            el.ownedSummary.textContent = minted + ' token' + (minted === 1 ? '' : 's') + ' minted on Sepolia';
+          }
+
+          // Load active listings
+          const nowSec = BigInt(Math.floor(Date.now() / 1000));
+          const activeListings = [];
+          const scanStart = Math.max(1, nextListingId - 30);
+          for (let id = nextListingId - 1; id >= scanStart; id--) {
+            const hex = await ethCall(ADDR.market, SEL.listings + padUint(id));
+            const active = decodeWord(hex, 7) !== 0n;
+            if (!active) continue;
+            const seller = decodeAddr(hex, 0);
+            const collection = decodeAddr(hex, 1);
+            const tokenId = Number(decodeWord(hex, 2));
+            const price = decodeWord(hex, 3);
+            const expiry = decodeWord(hex, 5);
+            const nonce = decodeWord(hex, 6);
+            if (expiry <= nowSec) continue;
+            const [curNonceHex, curOwnerHex] = await Promise.all([
+              ethCall(ADDR.market, SEL.sellerNonce + padAddr(seller)),
+              ethCall(collection, SEL.ownerOf + padUint(tokenId))
+            ]);
+            if (decodeWord(curNonceHex, 0) !== nonce) continue;
+            if (decodeAddr(curOwnerHex, 0) !== seller) continue;
+            activeListings.push({ id, seller, collection, tokenId, price, expiry });
+          }
+
+          clearNode(el.listingsContainer);
+          if (activeListings.length === 0) {
+            const empty = document.createElement('p');
+            empty.style.color = 'var(--text-dim)';
+            empty.style.fontSize = '0.9rem';
+            empty.textContent = 'No active listings right now on Sepolia. Token owners can create a floor-protected listing below.';
+            el.listingsContainer.appendChild(empty);
+          } else {
+            activeListings.forEach(l => {
+              const row = document.createElement('div');
+              row.className = 'listing-row';
+
+              const meta = document.createElement('div');
+              meta.className = 'listing-meta';
+
+              const badge = document.createElement('span');
+              badge.className = 'listing-token-badge';
+              badge.textContent = 'Token #' + l.tokenId;
+              meta.appendChild(badge);
+
+              const priceEl = document.createElement('strong');
+              priceEl.style.color = '#fff';
+              priceEl.style.fontFamily = 'var(--font-mono)';
+              priceEl.textContent = formatUsdc(l.price);
+              meta.appendChild(priceEl);
+
+              const sellerEl = document.createElement('span');
+              sellerEl.style.color = 'var(--text-muted)';
+              sellerEl.style.fontFamily = 'var(--font-mono)';
+              sellerEl.style.fontSize = '0.8rem';
+              sellerEl.textContent = 'Seller: ' + shortAddr(l.seller) + ' • Listing #' + l.id;
+              meta.appendChild(sellerEl);
+
+              const expEl = document.createElement('span');
+              expEl.style.color = 'var(--text-dim)';
+              expEl.style.fontSize = '0.8rem';
+              expEl.textContent = 'Expires: ' + new Date(Number(l.expiry) * 1000).toLocaleDateString();
+              meta.appendChild(expEl);
+
+              row.appendChild(meta);
+
+              const actionBtn = document.createElement('button');
+              actionBtn.type = 'button';
+              if (connectedAccount && connectedAccount === l.seller) {
+                actionBtn.className = 'btn btn-secondary';
+                actionBtn.textContent = 'Cancel Listing';
+                actionBtn.addEventListener('click', () => handleCancel(l.id));
+              } else {
+                actionBtn.className = 'btn btn-primary';
+                actionBtn.textContent = 'Buy for ' + formatUsdc(l.price);
+                actionBtn.disabled = isPaused;
+                actionBtn.addEventListener('click', () => handleBuy(l));
+              }
+              row.appendChild(actionBtn);
+              el.listingsContainer.appendChild(row);
+            });
+          }
+        } catch (err) {
+          el.liveFloor.textContent = 'RPC unavailable';
+          clearNode(el.listingsContainer);
+          const errP = document.createElement('p');
+          errP.style.color = '#f87171';
+          errP.style.fontSize = '0.88rem';
+          errP.textContent = 'Could not read Sepolia state: ' + friendlyError(err);
+          el.listingsContainer.appendChild(errP);
+        } finally {
+          el.refreshBtn.disabled = false;
+        }
+      }
+
+      el.connectBtn.addEventListener('click', connectWallet);
+      el.switchBtn.addEventListener('click', switchToSepolia);
+      el.refreshBtn.addEventListener('click', refreshMarket);
+      el.listPrice.addEventListener('input', updateListHint);
+      el.listBtn.addEventListener('click', handleList);
+      el.giftBtn.addEventListener('click', handleGift);
+
+      if (window.ethereum) {
+        window.ethereum.on('accountsChanged', accounts => {
+          connectedAccount = accounts && accounts[0] ? accounts[0].toLowerCase() : null;
+          updateWalletChrome();
+          refreshMarket();
+        });
+        window.ethereum.on('chainChanged', chainId => {
+          currentChainId = chainId;
+          updateWalletChrome();
+          refreshMarket();
+        });
+      }
+
+      refreshMarket();
+    })();
   </script>
 </body>
 </html>
