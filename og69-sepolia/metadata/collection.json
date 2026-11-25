@@ -1,0 +1,17 @@
+{
+  "name": "Original Sixty Nine",
+  "symbol": "OG69",
+  "description": "Original Sixty Nine - 69 cosmic gold 69 coin editions in the Comment Protocol universe, each featuring a unique Milky Way star formation.",
+  "seller_fee_basis_points": 500,
+  "image": "https://floorguardians.com/og69-sepolia/images/collection.jpg",
+  "external_url": "https://commentprotocol.com",
+  "properties": {
+    "category": "image",
+    "files": [
+      {
+        "uri": "https://floorguardians.com/og69-sepolia/images/collection.jpg",
+        "type": "image/jpeg"
+      }
+    ]
+  }
+}

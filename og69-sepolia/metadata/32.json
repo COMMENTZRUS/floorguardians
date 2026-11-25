@@ -1,0 +1,44 @@
+{
+  "name": "Original Sixty Nine #32",
+  "symbol": "OG69",
+  "description": "Original Sixty Nine - Edition #32 of 69. A cosmic 69 coin edition in the Comment Protocol universe, each featuring a unique star formation.",
+  "seller_fee_basis_points": 500,
+  "image": "https://floorguardians.com/og69-sepolia/images/32.jpg",
+  "external_url": "https://commentprotocol.com",
+  "edition": 32,
+  "attributes": [
+    {
+      "trait_type": "Edition",
+      "value": "#32 of 69"
+    },
+    {
+      "trait_type": "Coin",
+      "value": "Original 69 Gold"
+    },
+    {
+      "trait_type": "Star Sector",
+      "value": "Andromeda Edge"
+    },
+    {
+      "trait_type": "Star Formation",
+      "value": "Formation #32"
+    },
+    {
+      "trait_type": "Hero Stars",
+      "value": 15
+    }
+  ],
+  "collection": {
+    "name": "Original Sixty Nine",
+    "family": "Comment Protocol"
+  },
+  "properties": {
+    "category": "image",
+    "files": [
+      {
+        "uri": "https://floorguardians.com/og69-sepolia/images/32.jpg",
+        "type": "image/jpeg"
+      }
+    ]
+  }
+}
