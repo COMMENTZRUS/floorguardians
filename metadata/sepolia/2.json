@@ -1,0 +1,13 @@
+{
+  "name": "FloorGuard Sepolia #2",
+  "description": "Founding test token #2 for the FloorGuard Protocol on Ethereum Sepolia — used to verify live canonical Seaport 1.6 restricted settlement through FloorGuardSeaportZone with Circle Sepolia USDC.",
+  "image": "https://floorguardians.com/header.jpg",
+  "external_url": "https://floorguardians.com/#trade",
+  "attributes": [
+    { "trait_type": "Network", "value": "Ethereum Sepolia" },
+    { "trait_type": "Floor Policy", "value": "NonDecreasing" },
+    { "trait_type": "Founding Floor", "value": "5.00 USDC" },
+    { "trait_type": "Settlement Proof", "value": "Seaport 1.6 Restricted Zone" },
+    { "trait_type": "Edition", "value": "Testnet Proof #2" }
+  ]
+}

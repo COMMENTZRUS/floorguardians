@@ -1,0 +1,13 @@
+{
+  "name": "FloorGuard Sepolia #1",
+  "description": "Founding test token for the FloorGuard Protocol on Ethereum Sepolia. Enforces an immutable, non-decreasing 5.00 USDC floor on-chain via FloorGuardCore, FloorGuardDirectMarket, FloorGuardSeaportZone, and Cancun EIP-1153 transient storage.",
+  "image": "https://floorguardians.com/header.jpg",
+  "external_url": "https://floorguardians.com/#trade",
+  "attributes": [
+    { "trait_type": "Network", "value": "Ethereum Sepolia" },
+    { "trait_type": "Floor Policy", "value": "NonDecreasing" },
+    { "trait_type": "Founding Floor", "value": "5.00 USDC" },
+    { "trait_type": "Max Supply", "value": "69" },
+    { "trait_type": "Edition", "value": "Testnet Proof #1" }
+  ]
+}
